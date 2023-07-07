@@ -17,7 +17,7 @@ jobs:
       - name: Get the current version
         id: get_current_version
         run: |
-          echo ::set-output name=version::$(cat pyproject.toml | grep version | cut -d' ' -f3 | sed 's/"//g')
+          echo "version=$(cat pyproject.toml | grep version | cut -d' ' -f3 | sed 's/"//g')" >> $GITHUB_OUTPUT
 
       - name: Get the label to add
         id: get_label
