@@ -1,18 +1,18 @@
 # Microsoft Python client
 
-[![Python tests](https://github.com/cern-vc/MS-python-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/cern-vc/MS-python-client/actions/workflows/python-tests.yml)
-[![pre-commit](https://github.com/cern-vc/MS-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/cern-vc/MS-python-client/actions/workflows/pre-commit.yaml)
-[![CodeQL](https://github.com/cern-vc/MS-python-client/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cern-vc/MS-python-client/actions/workflows/codeql-analysis.yml)
-[![codecov](https://codecov.io/gh/cern-vc/MS-python-client/branch/main/graph/badge.svg?token=04EY0K0P2S)](https://codecov.io/gh/cern-vc/MS-python-client)
+[![Python tests](https://github.com/SamuelGuillemet/ms-python-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/SamuelGuillemet/ms-python-client/actions/workflows/python-tests.yml)
+[![pre-commit](https://github.com/SamuelGuillemet/ms-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/SamuelGuillemet/ms-python-client/actions/workflows/pre-commit.yaml)
+[![CodeQL](https://github.com/SamuelGuillemet/ms-python-client/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/SamuelGuillemet/ms-python-client/actions/workflows/codeql-analysis.yml)
+[![codecov](https://codecov.io/gh/SamuelGuillemet/MS-python-client/branch/main/graph/badge.svg?token=04EY0K0P2S)](https://codecov.io/gh/SamuelGuillemet/MS-python-client)
 
 Microsoft graph API Python client with support for [Server to Server Oauth tokens](https://learn.microsoft.com/en-us/graph/auth/auth-concepts?view=graph-rest-1.0) with App Only access.
 
 ## Install
 
-This package is [available on Pypi](https://pypi.org/project/MS-python-client/)
+This package is [available on Pypi](https://pypi.org/project/ms-python-client/)
 
 ```bash
-pip install MS-python-client
+pip install ms-python-client
 ```
 
 ## Requirements
@@ -25,15 +25,15 @@ pip install MS-python-client
 
 Define the following variables in your `env` or your `.env` file:
 
-- ms_ACCOUNT_ID
-- ms_CLIENT_ID
-- ms_CLIENT_SECRET
+- MS_ACCOUNT_ID
+- MS_CLIENT_ID
+- MS_CLIENT_SECRET
 
 #### For testing purposes
 
 For testing purposes, you can use the following values:
 
-- ms_ACCESS_TOKEN
+- MS_ACCESS_TOKEN
 
 This token could be obtained from the [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) by clicking on the `Sign in with Microsoft` button and then clicking on the `Access Token` tab.
 
