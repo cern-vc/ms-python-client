@@ -1,4 +1,4 @@
-name: Add labels to the pull request on main for bumping the version from pyproject.toml
+name: Labels pull request
 
 on:
   pull_request:
