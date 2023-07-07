@@ -19,7 +19,7 @@ pip install ms-python-client
 
 - Python >= 3.10
 
-## Usage
+## How to configure the client variables to make API calls
 
 ### Defining your env variables
 
@@ -31,11 +31,13 @@ Define the following variables in your `env` or your `.env` file:
 
 #### For testing purposes
 
-For testing purposes, you can use the following values:
+For testing purposes, you can use the following value:
 
 - MS_ACCESS_TOKEN
 
 This token could be obtained from the [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) by clicking on the `Sign in with Microsoft` button and then clicking on the `Access Token` tab.
+
+## Usage
 
 ### Initialize the MSApiClient from environment variables
 
@@ -108,7 +110,7 @@ setup_logs(log_level=logging.DEBUG)
 4. update an event
 5. delete an event
 
-## CERN specific endpoints
+## CERN specific usage
 
 Instead of using the `MSApiClient` class, you can use the `CERNMSApiClient` class, which is a subclass of the `MSApiClient` class.
 This class will provide you some more utilities but it will only work for CERN users (obviously).
@@ -117,10 +119,12 @@ This will be used in the context of synchronizing the events between the CERN In
 
 ### How to initialize the CERNMSApiClient
 
+Follow the [How to configure the client variables to make API calls](#how-to-configure-the-client-variables-to-make-api-calls) section and then:
+
 ```python
 from ms_python_client.cern_ms_api_client import CERNMSApiClient
 
-cern_ms_client = CERNMSApiClient.init_from_env()
+cern_ms_client = CERNMSApiClient.init_from_dotenv()
 ```
 
 ### Available endpoints
@@ -135,18 +139,14 @@ cern_ms_client = CERNMSApiClient.init_from_env()
 
 You will find useful the `EventParameters` and `PartialEventParameters` classes, which will help you to create the events.
 
-**indico_event_id** is the id of the event in the indico system which is mandatory to create an event.
-
-**USER_ID** is the email of the Zoom Room.
+- `INDICO_EVENT_ID` is the id of the event in the indico system which is **mandatory** to create an event.
+- `USER_ID` is the email of the Zoom Room.
 
 ```python
-from ms_python_client.cern_ms_api_client import (
-        CERNMSApiClient,
-        EventParameters,
-        PartialEventParameters,
-        )
+from ms_python_client.cern_ms_api_client import CERNMSApiClient
+from ms_python_client.utils.event_generator import (EventParameters, PartialEventParameters)
 
-cern_ms_client = CERNMSApiClient.init_from_env()
+cern_ms_client = CERNMSApiClient.init_from_dotenv()
 
 USER_ID = os.getenv("USER_ID") # Which is the email of the Zoom Room
 INDICO_EVENT_ID = os.getenv("INDICO_EVENT_ID")
