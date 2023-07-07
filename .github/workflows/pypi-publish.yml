@@ -1,7 +1,10 @@
 name: Build and publish Python package
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: ["Release on push to main branch"]
+    branches: [main]
+    types:
+      - completed
 
 jobs:
   build:
