@@ -1,6 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 import requests
 
@@ -10,7 +10,7 @@ logger = logging.getLogger("ms_python_client")
 class MSClientInterface(ABC):
     @abstractmethod
     def make_get_request(
-        self, api_path: str, parameters: Mapping[str, str] | None = None
+        self, api_path: str, parameters: Optional[Mapping[str, str]] = None
     ) -> requests.Response:
         logger.warning("Method not implemented")
         raise NotImplementedError

@@ -103,7 +103,9 @@ class MSApiClient(MSClientInterface):
         )
         return headers
 
-    def build_query_string_from_dict(self, parameters: Mapping[str, str] | None) -> str:
+    def build_query_string_from_dict(
+        self, parameters: Optional[Mapping[str, str]]
+    ) -> str:
         query_string = "?"
         for key, value in parameters.items() if parameters else []:
             if value:
@@ -111,7 +113,7 @@ class MSApiClient(MSClientInterface):
         return query_string[:-1]
 
     def make_get_request(
-        self, api_path: str, parameters: Mapping[str, str] | None = None
+        self, api_path: str, parameters: Optional[Mapping[str, str]] = None
     ) -> requests.Response:
         headers = self.build_headers()
         query_string = self.build_query_string_from_dict(parameters)
