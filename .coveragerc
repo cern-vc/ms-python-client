@@ -1,0 +1,2 @@
+[run]
+omit = ms_python_client/ms_client_interface.py
