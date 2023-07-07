@@ -8,6 +8,7 @@ import requests
 from msal import ConfidentialClientApplication, SerializableTokenCache
 
 from ms_python_client.api_client import ApiClient
+from ms_python_client.components.events.events_component import EventsComponent
 from ms_python_client.ms_client_interface import MSClientInterface
 from ms_python_client.utils import init_from_env
 
@@ -56,7 +57,7 @@ class MSApiClient(MSClientInterface):
 
     def init_components(self):
         # Add all the new components here
-        pass
+        self.events = EventsComponent(self)
 
     def __init__(
         self,
