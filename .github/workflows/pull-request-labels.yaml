@@ -1,4 +1,4 @@
-name: Add labels to the pull request on main for bumping the version
+name: Add labels to the pull request on main for bumping the version from pyproject.toml
 
 on:
   pull_request:
@@ -24,7 +24,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const labels = ["bump:patch", "bump:minor", "bump:major"];
+            const labels = ["release:patch", "release:minor", "release:major"];
             const last_release = await github.repos.getLatestRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
