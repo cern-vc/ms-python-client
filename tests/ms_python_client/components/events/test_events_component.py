@@ -2,7 +2,6 @@ import responses
 
 from ms_python_client.components.events.events_component import EventsComponent
 from ms_python_client.ms_api_client import MSApiClient
-from ms_python_client.utils.event_generator import EventParameters
 from tests.ms_python_client.base_test_case import TEST_API_ENDPOINT, BaseTest, mock_msal
 
 
@@ -45,15 +44,12 @@ class TestEventsComponent(BaseTest):
             json={"response": "ok"},
             status=200,
         )
-        event_parameters = EventParameters(
-            zoom_url="https://zoom.us/j/1234567890",
-            indico_event_id="1234567890",
-            subject="Test Event",
-            start_time="2021-01-01T00:00:00",
-            end_time="2021-01-01T01:00:00",
-        )
-        event = self.events_component.create_event("user_id", event_parameters)
+        data = {
+            "key": "value",
+        }
+        event = self.events_component.create_event("user_id", data)
         assert event["response"] == "ok"
+        assert responses.calls[0].request.body == '{"key": "value"}'
 
     @responses.activate
     def test_update_event(self):
@@ -63,17 +59,12 @@ class TestEventsComponent(BaseTest):
             json={"response": "ok"},
             status=200,
         )
-        event_parameters = EventParameters(
-            zoom_url="https://zoom.us/j/1234567890",
-            indico_event_id="1234567890",
-            subject="Test Event",
-            start_time="2021-01-01T00:00:00",
-            end_time="2021-01-01T01:00:00",
-        )
-        event = self.events_component.update_event(
-            "user_id", "event_id", event_parameters
-        )
+        data = {
+            "key": "value",
+        }
+        event = self.events_component.update_event("user_id", "event_id", data)
         assert event["response"] == "ok"
+        assert responses.calls[0].request.body == '{"key": "value"}'
 
     @responses.activate
     def test_delete_event(self):
