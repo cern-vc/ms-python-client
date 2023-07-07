@@ -1,9 +1,8 @@
 name: Build and publish Python package
 on:
-  push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
-      - "v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+" # for beta releases
+  release:
+    types: [created]
+
 jobs:
   build:
     runs-on: ubuntu-latest

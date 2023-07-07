@@ -4,7 +4,7 @@ name: Release on push to main branch
 
 on:
   push:
-    branches: ["main"]
+    branches: [main]
 
 jobs:
   release-on-push:
@@ -26,31 +26,3 @@ jobs:
     outputs:
       tag_name: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
-
-  update-pyproject:
-    needs: release-on-push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Get the version built by the previous job and remove the v prefix
-        id: get-version
-        run: echo "${{ needs.release-on-push.outputs.version }}" | sed 's/^v//' > $GITHUB_ENV_VERSION
-      
-      - name: Verify the matching version in pyproject.toml
-        run: |
-          if [ "$(cat pyproject.toml | grep version | cut -d' ' -f3 | sed 's/"//g')" != "$GITHUB_ENV_VERSION" ]; then
-            echo "The version in pyproject.toml does not match the version built by the previous job"
-            sed -i "s/version = .*/version = \"$GITHUB_ENV_VERSION\"/" pyproject.toml
-          fi
-
-      - name: Update pyproject.toml
-        run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "SamuelGuillemet@users.noreply.github.com"
-          git add pyproject.toml
-          git commit -m "Update pyproject.toml version to $GITHUB_ENV_VERSION"
-          git push
