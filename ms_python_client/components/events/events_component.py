@@ -1,4 +1,4 @@
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 from ms_python_client.ms_client_interface import MSClientInterface
 
@@ -8,7 +8,7 @@ class EventsComponent:
         self.client = client
 
     def list_events(
-        self, user_id: str, parameters: Mapping[str, str] | None = None
+        self, user_id: str, parameters: Optional[Mapping[str, str]] = None
     ) -> dict:
         """List all the events of a user
 
