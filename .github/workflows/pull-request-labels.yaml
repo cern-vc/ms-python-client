@@ -6,45 +6,47 @@ on:
       - main
 
 jobs:
-    add-labels:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v2
-            with:
-                fetch-depth: 0
+  add-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-          - name: Get the current version
-            id: get_current_version
-            run: |
-              echo "$(cat pyproject.toml | grep version | cut -d' ' -f3 | sed 's/"//g')" > $VERSION
+      - name: Get the current version
+        id: get_current_version
+        run: |
+          echo ::set-output name=version::$(cat pyproject.toml | grep version | cut -d' ' -f3 | sed 's/"//g')
 
-          - name: Get the last release version
-            uses: actions/github-script@v3
-            with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
-                script: |
-                    const labels = ["bump:patch", "bump:minor", "bump:major"];
-                    const last_release = await github.repos.getLatestRelease({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                    });
-                    const last_release_tag = last_release.data.tag_name;
-                    const last_release_version = last_release_tag.replace("v", "");
-                    if (last_release_version === process.env.VERSION) {
-                        core.setFailed("The version has not been bumped");
-                    } else {
-                        const last_release_version_split = last_release_version.split(".");
-                        const current_version_split = process.env.VERSION.split(".");
-                        if (last_release_version_split[0] !== current_version_split[0]) {
-                            core.setOutput("label", labels[2]);
-                        } else if (last_release_version_split[1] !== current_version_split[1]) {
-                            core.setOutput("label", labels[1]);
-                        } else {
-                            core.setOutput("label", labels[0]);
-                        }
-                    }
-          - name: Add labels
-            uses: actions-ecosystem/action-add-labels@v1
-            with:
-                labels: ${{ steps.get_current_version.outputs.label }}
+      - name: Get the last release version
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const labels = ["bump:patch", "bump:minor", "bump:major"];
+            const last_release = await github.repos.getLatestRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+            });
+            const last_release_tag = last_release.data.tag_name;
+            const last_release_version = last_release_tag.replace("v", "");
+            if (last_release_version === process.env.VERSION) {
+                core.setFailed("The version has not been bumped");
+            } else {
+                const last_release_version_split = last_release_version.split(".");
+                const current_version_split = process.env.VERSION.split(".");
+                if (last_release_version_split[0] !== current_version_split[0]) {
+                    core.setOutput("label", labels[2]);
+                } else if (last_release_version_split[1] !== current_version_split[1]) {
+                    core.setOutput("label", labels[1]);
+                } else {
+                    core.setOutput("label", labels[0]);
+                }
+            }
+        env:
+          VERSION: ${{ steps.get_current_version.outputs.version }}
+      - name: Add labels
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: ${{ steps.get_current_version.outputs.label }}
