@@ -1,6 +1,5 @@
 from typing import Optional
 
-from ms_python_client.api_client import ApiClient
 from ms_python_client.components.events.cern_events_component import (
     CERNEventsComponents,
 )
@@ -18,7 +17,6 @@ class CERNMSApiClient(MSApiClient):
         use_path: Optional[str] = None,
     ):
         super().__init__(account_id, client_id, client_secret, api_endpoint, use_path)
-        self.api_client = ApiClient(api_base_url=api_endpoint)
         self.init_components()
 
     def init_components(self):
