@@ -9,6 +9,7 @@ from msal import ConfidentialClientApplication, SerializableTokenCache
 
 from ms_python_client.api_client import ApiClient
 from ms_python_client.components.events.events_component import EventsComponent
+from ms_python_client.components.events.users_component import UsersComponent
 from ms_python_client.ms_client_interface import MSClientInterface
 from ms_python_client.utils import init_from_env
 
@@ -58,6 +59,7 @@ class MSApiClient(MSClientInterface):
     def init_components(self):
         # Add all the new components here
         self.events = EventsComponent(self)
+        self.users = UsersComponent(self)
 
     def __init__(
         self,
@@ -137,7 +139,7 @@ class MSApiClient(MSClientInterface):
 
     def make_patch_request(self, api_path: str, data: TypeData) -> requests.Response:
         headers = self.build_headers()
-        print(json.dumps(data))
+
         response = self.api_client.make_patch_request(
             api_path=api_path, headers=headers, data=json.dumps(data)
         )
