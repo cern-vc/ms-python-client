@@ -6,17 +6,10 @@ from ms_python_client.api_client import ApiClient
 from tests.ms_python_client.base_test_case import TEST_API_ENDPOINT
 
 
-def test_api_client_build_headers():
-    api_client = ApiClient(TEST_API_ENDPOINT)
-    headers = api_client.build_headers()
-    assert headers == {"Content-type": "application/json"}
-
-
 def test_api_client_build_headers_extra():
     api_client = ApiClient(TEST_API_ENDPOINT)
     headers = api_client.build_headers({"Authentication": "Bearer 12345"})
     assert headers == {
-        "Content-type": "application/json",
         "Authentication": "Bearer 12345",
     }
 
@@ -73,9 +66,16 @@ class TestApiClient(unittest.TestCase):
             json={"response": "ok"},
             status=200,
         )
-        response = self.api_client.make_post_request("/test", headers=self.headers)
+        json = {
+            "test": "test",
+        }
+        response = self.api_client.make_post_request(
+            "/test", headers=self.headers, json=json
+        )
 
         assert response.status_code == 200
+        assert response.request.body == b'{"test": "test"}'
+        assert response.request.headers["Content-Type"] == "application/json"
 
     @responses.activate
     def test_api_client_make_post_request_error(self):
@@ -96,9 +96,16 @@ class TestApiClient(unittest.TestCase):
             json={"response": "ok"},
             status=200,
         )
-        response = self.api_client.make_patch_request("/test", headers=self.headers)
+        json = {
+            "test": "test",
+        }
+        response = self.api_client.make_patch_request(
+            "/test", headers=self.headers, json=json
+        )
 
         assert response.status_code == 200
+        assert response.request.body == b'{"test": "test"}'
+        assert response.request.headers["Content-Type"] == "application/json"
 
     @responses.activate
     def test_api_client_make_patch_request_error(self):
@@ -119,9 +126,16 @@ class TestApiClient(unittest.TestCase):
             json={"response": "ok"},
             status=200,
         )
-        response = self.api_client.make_delete_request("/test", headers=self.headers)
+        json = {
+            "test": "test",
+        }
+        response = self.api_client.make_delete_request(
+            "/test", headers=self.headers, json=json
+        )
 
         assert response.status_code == 200
+        assert response.request.body == b'{"test": "test"}'
+        assert response.request.headers["Content-Type"] == "application/json"
 
     @responses.activate
     def test_api_client_make_delete_request_error(self):

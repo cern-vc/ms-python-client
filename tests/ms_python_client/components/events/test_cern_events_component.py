@@ -30,11 +30,17 @@ class TestEventsComponent(BaseTest):
             json={"response": "ok"},
             status=200,
         )
-        events_list = self.events_component.list_events("user_id")
+        headers = {
+            "test": "test",
+        }
+        events_list = self.events_component.list_events(
+            "user_id", extra_headers=headers
+        )
         assert events_list["response"] == "ok"
+        assert responses.calls[0].request.headers["test"] == "test"
 
     @responses.activate
-    def test_get_event_by_indico_id_0(self):
+    def test_get_event_by_zoom_id_0(self):
         responses.add(
             responses.GET,
             f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
@@ -42,21 +48,27 @@ class TestEventsComponent(BaseTest):
             status=200,
         )
         with pytest.raises(NotFoundError):
-            self.events_component.get_event_by_indico_id("user_id", "indico_id")
+            self.events_component.get_event_by_zoom_id("user_id", "zoom_id")
 
     @responses.activate
-    def test_get_event_by_indico_id_1(self):
+    def test_get_event_by_zoom_id_1(self):
         responses.add(
             responses.GET,
             f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
             json={
                 "@odata.count": 2,
-                "value": [{"subject": "indico_id_1"}, {"subject": "indico_id_2"}],
+                "value": [{"subject": "zoom_id_1"}, {"subject": "zoom_id_2"}],
             },
             status=200,
         )
-        result = self.events_component.get_event_by_indico_id("user_id", "indico_id_1")
-        assert result["subject"] == "indico_id_1"
+        headers = {
+            "test": "test",
+        }
+        result = self.events_component.get_event_by_zoom_id(
+            "user_id", "zoom_id_1", headers
+        )
+        assert result["subject"] == "zoom_id_1"
+        assert responses.calls[0].request.headers["test"] == "test"
 
     @responses.activate
     def test_create_event(self):
@@ -68,13 +80,17 @@ class TestEventsComponent(BaseTest):
         )
         event_parameters = EventParameters(
             zoom_url="https://zoom.us/j/1234567890",
-            indico_event_id="1234567890",
+            zoom_id="1234567890",
             subject="Test Event",
             start_time="2021-01-01T00:00:00",
             end_time="2021-01-01T01:00:00",
         )
-        event = self.events_component.create_event("user_id", event_parameters)
+        headers = {
+            "test": "test",
+        }
+        event = self.events_component.create_event("user_id", event_parameters, headers)
         assert event["response"] == "ok"
+        assert responses
 
     @responses.activate
     def test_update_event(self):
@@ -95,15 +111,19 @@ class TestEventsComponent(BaseTest):
         )
         event_parameters = PartialEventParameters(
             zoom_url="https://zoom.us/j/1234567890",
-            indico_event_id="1234567890",
+            zoom_id="1234567890",
             subject="Test Event",
             start_time="2021-01-01T00:00:00",
             end_time="2021-01-01T01:00:00",
         )
-        event = self.events_component.update_event_by_indico_id(
-            "user_id", event_parameters
+        headers = {
+            "test": "test",
+        }
+        event = self.events_component.update_event_by_zoom_id(
+            "user_id", event_parameters, headers
         )
         assert event["response"] == "ok"
+        assert responses.calls[0].request.headers["test"] == "test"
 
     @responses.activate
     def test_delete_event(self):
@@ -121,4 +141,8 @@ class TestEventsComponent(BaseTest):
             },
             status=200,
         )
-        self.events_component.delete_event_by_indico_id("user_id", "indico_id")
+        headers = {
+            "test": "test",
+        }
+        self.events_component.delete_event_by_zoom_id("user_id", "zoom_id", headers)
+        assert responses.calls[0].request.headers["test"] == "test"

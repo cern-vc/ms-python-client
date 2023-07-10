@@ -1,10 +1,14 @@
 import logging
+from typing import Any, Mapping, Optional
 
 from requests import RequestException, Response, Session
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
 logger = logging.getLogger("ms_python_client")
+
+_Headers = Mapping[str, str]
+_Data = Mapping[str, Any]
 
 
 class ApiClient:
@@ -22,21 +26,21 @@ class ApiClient:
         self.session.mount("http://", adapter)
         self.session.mount("https://", adapter)
 
-    def build_headers(self, extra_headers=None) -> dict:
+    def build_headers(self, extra_headers: Optional[_Headers] = None) -> dict:
         """Create the headers for a request appending the ones in the params
 
         Args:
-            extra_headers (dict): Dict of headers that will be appended to the default ones
+            extra_headers (dict): Mapping of headers that will be appended to the default ones
 
         Returns:
             dict: All the headers
         """
-        headers = {"Content-type": "application/json"}
+        headers: dict[str, str] = {}
         if extra_headers:
             headers.update(extra_headers)
         return headers
 
-    def make_get_request(self, api_path: str, headers: dict) -> Response:
+    def make_get_request(self, api_path: str, headers: _Headers) -> Response:
         """Makes a GET request using requests
 
         Args:
@@ -48,7 +52,7 @@ class ApiClient:
         """
         response = None
         full_url = self.api_base_url + api_path
-        logger.debug("GET %s", api_path)
+        logger.info("GET %s", api_path)
         try:
             response = self.session.get(full_url, headers=headers, timeout=self.timeout)
             response.raise_for_status()
@@ -65,23 +69,25 @@ class ApiClient:
         )
         return response
 
-    def make_post_request(self, api_path: str, headers=None, data=None) -> Response:
+    def make_post_request(
+        self, api_path: str, headers: _Headers, json: Optional[_Data] = None
+    ) -> Response:
         """Makes a POST request using requests
 
         Args:
             api_path (str): The URL path
             headers (dict): The headers of the request
-            data (dict): The body of the request
+            json (dict): The body of the request
 
         Returns:
             Response: The response of the request
         """
         response = None
         full_url = self.api_base_url + api_path
-        logger.debug("POST %s", api_path)
+        logger.info("POST %s", api_path)
         try:
             response = self.session.post(
-                full_url, headers=headers, data=data, timeout=self.timeout
+                full_url, headers=headers, json=json, timeout=self.timeout
             )
             response.raise_for_status()
         except RequestException as e:
@@ -97,23 +103,25 @@ class ApiClient:
         )
         return response
 
-    def make_patch_request(self, api_path: str, headers=None, data=None) -> Response:
+    def make_patch_request(
+        self, api_path: str, headers: _Headers, json: Optional[_Data] = None
+    ) -> Response:
         """Makes a PATCH request using requests
 
         Args:
             api_path (str): The URL path
             headers (dict): The headers of the request
-            data (dict): The body of the request
+            json (dict): The body of the request
 
         Returns:
             Response: The response of the request
         """
         response = None
         full_url = self.api_base_url + api_path
-        logger.debug("PATCH %s", api_path)
+        logger.info("PATCH %s", api_path)
         try:
             response = self.session.patch(
-                full_url, headers=headers, data=data, timeout=self.timeout
+                full_url, headers=headers, json=json, timeout=self.timeout
             )
             response.raise_for_status()
         except RequestException as e:
@@ -129,23 +137,25 @@ class ApiClient:
         )
         return response
 
-    def make_delete_request(self, api_path: str, headers=None, data=None) -> Response:
+    def make_delete_request(
+        self, api_path: str, headers: _Headers, json: Optional[_Data] = None
+    ) -> Response:
         """Makes a DELETE request using requests
 
         Args:
             api_path (str): The URL path
             headers (dict): The headers of the request
-            data (dict): The body of the request
+            json (dict): The body of the request
 
         Returns:
             Response: The response of the request
         """
         response = None
         full_url = self.api_base_url + api_path
-        logger.debug("DELETE %s", api_path)
+        logger.info("DELETE %s", api_path)
         try:
             response = self.session.delete(
-                full_url, headers=headers, data=data, timeout=self.timeout
+                full_url, headers=headers, json=json, timeout=self.timeout
             )
             response.raise_for_status()
         except RequestException as e:

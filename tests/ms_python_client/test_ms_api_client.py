@@ -47,7 +47,14 @@ class TestMSApiClientInit(BaseTest):
         headers = client.build_headers()
         assert headers is not None
         assert headers["Authorization"] == f"Bearer {MOCK_TOKEN}"
-        assert headers["Content-type"] == "application/json"
+
+    @mock_msal()
+    def test_build_headers_with_extra_headers(self):
+        client = MSApiClient.init_from_dotenv(custom_dotenv=self.env_file)
+        headers = client.build_headers({"test": "test"})
+        assert headers is not None
+        assert headers["Authorization"] == f"Bearer {MOCK_TOKEN}"
+        assert headers["test"] == "test"
 
     @mock_msal(cache_enabled=False)
     def test_build_header_without_cache(self):
@@ -55,7 +62,6 @@ class TestMSApiClientInit(BaseTest):
         headers = client.build_headers()
         assert headers is not None
         assert headers["Authorization"] == f"Bearer {MOCK_TOKEN}"
-        assert headers["Content-type"] == "application/json"
 
     def test_with_token(self):
         os.environ["MS_ACCESS_TOKEN"] = "test_token"
@@ -63,16 +69,13 @@ class TestMSApiClientInit(BaseTest):
         headers = client.build_headers()
         assert headers is not None
         assert headers["Authorization"] == "Bearer test_token"
-        assert headers["Content-type"] == "application/json"
-
-        os.environ.pop("MS_ACCESS_TOKEN", None)
 
 
 class TestMSApiClient(BaseTest):
     @mock_msal()
     def setUp(self) -> None:
+        super().setUp()
         self.client = MSApiClient("AAA", "BBB", "CCC", api_endpoint=TEST_API_ENDPOINT)
-        return super().setUp()
 
     @responses.activate
     def test_get_request(self):

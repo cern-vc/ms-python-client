@@ -28,7 +28,10 @@ class CERNEventsComponents:
         self.events_component = EventsComponent(client)
 
     def list_events(
-        self, user_id: str, parameters: Optional[Mapping[str, str]] = None
+        self,
+        user_id: str,
+        parameters: Optional[Mapping[str, str]] = None,
+        extra_headers: Optional[Mapping[str, str]] = None,
     ) -> dict:
         """List all the events of a user
 
@@ -39,34 +42,44 @@ class CERNEventsComponents:
         Returns:
             dict: The response of the request
         """
-        return self.events_component.list_events(user_id, parameters)
+        return self.events_component.list_events(user_id, parameters, extra_headers)
 
-    def get_event_by_indico_id(self, user_id: str, indico_id: str) -> dict:
+    def get_event_by_zoom_id(
+        self,
+        user_id: str,
+        zoom_id: str,
+        extra_headers: Optional[Mapping[str, str]] = None,
+    ) -> dict:
         """Get an event of a user
 
         Args:
-            indico_id (str): The event id
+            zoom_id (str): The event id
 
         Returns:
             dict: The response of the request
         """
-        parameters = {"$count": "true", "$filter": f"contains(subject,'{indico_id}')"}
-        response = self.events_component.list_events(user_id, parameters)
+        parameters = {"$count": "true", "$filter": f"contains(subject,'{zoom_id}')"}
+        response = self.events_component.list_events(user_id, parameters, extra_headers)
 
         count = response.get("@odata.count", 0)
         if count == 0:
-            raise NotFoundError(f"Event with indico id {indico_id} not found")
+            raise NotFoundError(f"Event with zoom id {zoom_id} not found")
 
         if count > 1:
             logger.warning(
-                "Found %s events with indico id %s. Returning the first one.",
+                "Found %s events with zoom id %s. Returning the first one.",
                 count,
-                indico_id,
+                zoom_id,
             )
 
         return response.get("value", [])[0]
 
-    def create_event(self, user_id: str, event: EventParameters) -> dict:
+    def create_event(
+        self,
+        user_id: str,
+        event: EventParameters,
+        extra_headers: Optional[Mapping[str, str]] = None,
+    ) -> dict:
         """Create an event for a user
 
         Args:
@@ -76,11 +89,14 @@ class CERNEventsComponents:
         Returns:
             dict: The response of the request
         """
-        data = create_event_body(event)
-        return self.events_component.create_event(user_id, data)
+        json = create_event_body(event)
+        return self.events_component.create_event(user_id, json, extra_headers)
 
-    def update_event_by_indico_id(
-        self, user_id: str, event: PartialEventParameters
+    def update_event_by_zoom_id(
+        self,
+        user_id: str,
+        event: PartialEventParameters,
+        extra_headers: Optional[Mapping[str, str]] = None,
     ) -> dict:
         """Update an event for a user
 
@@ -91,19 +107,28 @@ class CERNEventsComponents:
         Returns:
             dict: The response of the request
         """
-        data = create_partial_event_body(event)
-        event_id = self.get_event_by_indico_id(user_id, event["indico_event_id"])["id"]
-        return self.events_component.update_event(user_id, event_id, data)
+        json = create_partial_event_body(event)
+        event_id = self.get_event_by_zoom_id(user_id, event["zoom_id"], extra_headers)[
+            "id"
+        ]
+        return self.events_component.update_event(
+            user_id, event_id, json, extra_headers
+        )
 
-    def delete_event_by_indico_id(self, user_id: str, indico_id: str) -> None:
+    def delete_event_by_zoom_id(
+        self,
+        user_id: str,
+        zoom_id: str,
+        extra_headers: Optional[Mapping[str, str]] = None,
+    ) -> None:
         """Delete an event of a user
 
         Args:
             user_id (str): The user id
-            indico_id (str): The event id
+            zoom_id (str): The event id
 
         Returns:
             dict: The response of the request
         """
-        event_id = self.get_event_by_indico_id(user_id, indico_id)["id"]
-        self.events_component.delete_event(user_id, event_id)
+        event_id = self.get_event_by_zoom_id(user_id, zoom_id, extra_headers)["id"]
+        self.events_component.delete_event(user_id, event_id, extra_headers)

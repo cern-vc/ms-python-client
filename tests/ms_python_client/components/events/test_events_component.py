@@ -22,8 +22,19 @@ class TestEventsComponent(BaseTest):
             json={"response": "ok"},
             status=200,
         )
-        events_list = self.events_component.list_events("user_id")
+        parameters = {
+            "key": "value",
+        }
+        headers = {
+            "test": "test",
+        }
+        events_list = self.events_component.list_events("user_id", parameters, headers)
         assert events_list["response"] == "ok"
+        assert (
+            responses.calls[0].request.url
+            == f"{TEST_API_ENDPOINT}/users/user_id/calendar/events?key=value"
+        )
+        assert responses.calls[0].request.headers["test"] == "test"
 
     @responses.activate
     def test_get_event(self):
@@ -33,8 +44,12 @@ class TestEventsComponent(BaseTest):
             json={"response": "ok"},
             status=200,
         )
-        event = self.events_component.get_event("user_id", "event_id")
+        headers = {
+            "test": "test",
+        }
+        event = self.events_component.get_event("user_id", "event_id", headers)
         assert event["response"] == "ok"
+        assert responses.calls[0].request.headers["test"] == "test"
 
     @responses.activate
     def test_create_event(self):
@@ -47,9 +62,14 @@ class TestEventsComponent(BaseTest):
         data = {
             "key": "value",
         }
-        event = self.events_component.create_event("user_id", data)
+        headers = {
+            "test": "test",
+        }
+        event = self.events_component.create_event("user_id", data, headers)
         assert event["response"] == "ok"
-        assert responses.calls[0].request.body == '{"key": "value"}'
+        assert responses.calls[0].request.body == b'{"key": "value"}'
+        assert responses.calls[0].request.headers["Content-Type"] == "application/json"
+        assert responses.calls[0].request.headers["test"] == "test"
 
     @responses.activate
     def test_update_event(self):
@@ -62,9 +82,14 @@ class TestEventsComponent(BaseTest):
         data = {
             "key": "value",
         }
-        event = self.events_component.update_event("user_id", "event_id", data)
+        headers = {
+            "test": "test",
+        }
+        event = self.events_component.update_event("user_id", "event_id", data, headers)
         assert event["response"] == "ok"
-        assert responses.calls[0].request.body == '{"key": "value"}'
+        assert responses.calls[0].request.body == b'{"key": "value"}'
+        assert responses.calls[0].request.headers["Content-Type"] == "application/json"
+        assert responses.calls[0].request.headers["test"] == "test"
 
     @responses.activate
     def test_delete_event(self):
@@ -73,4 +98,8 @@ class TestEventsComponent(BaseTest):
             f"{TEST_API_ENDPOINT}/users/user_id/calendar/events/event_id",
             status=204,
         )
-        self.events_component.delete_event("user_id", "event_id")
+        headers = {
+            "test": "test",
+        }
+        self.events_component.delete_event("user_id", "event_id", headers)
+        assert responses.calls[0].request.headers["test"] == "test"
