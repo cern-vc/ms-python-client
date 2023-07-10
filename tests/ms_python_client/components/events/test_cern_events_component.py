@@ -26,7 +26,7 @@ class TestEventsComponent(BaseTest):
     def test_list_events(self):
         responses.add(
             responses.GET,
-            "http://localhost/users/user_id/calendar/events",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
             json={"response": "ok"},
             status=200,
         )
@@ -37,7 +37,7 @@ class TestEventsComponent(BaseTest):
     def test_get_event_by_indico_id_0(self):
         responses.add(
             responses.GET,
-            "http://localhost/users/user_id/calendar/events",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
             json={"@odata.count": 0},
             status=200,
         )
@@ -48,7 +48,7 @@ class TestEventsComponent(BaseTest):
     def test_get_event_by_indico_id_1(self):
         responses.add(
             responses.GET,
-            "http://localhost/users/user_id/calendar/events",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
             json={
                 "@odata.count": 2,
                 "value": [{"subject": "indico_id_1"}, {"subject": "indico_id_2"}],
@@ -62,7 +62,7 @@ class TestEventsComponent(BaseTest):
     def test_create_event(self):
         responses.add(
             responses.POST,
-            "http://localhost/users/user_id/calendar/events",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
             json={"response": "ok"},
             status=200,
         )
@@ -80,13 +80,13 @@ class TestEventsComponent(BaseTest):
     def test_update_event(self):
         responses.add(
             responses.PATCH,
-            "http://localhost/users/user_id/calendar/events/event_id",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events/event_id",
             json={"response": "ok"},
             status=200,
         )
         responses.add(
             responses.GET,
-            "http://localhost/users/user_id/calendar/events",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
             json={
                 "@odata.count": 1,
                 "value": [{"id": "event_id", "subject": "Test Event"}],
@@ -109,12 +109,12 @@ class TestEventsComponent(BaseTest):
     def test_delete_event(self):
         responses.add(
             responses.DELETE,
-            "http://localhost/users/user_id/calendar/events/event_id",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events/event_id",
             status=204,
         )
         responses.add(
             responses.GET,
-            "http://localhost/users/user_id/calendar/events",
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
             json={
                 "@odata.count": 1,
                 "value": [{"id": "event_id", "subject": "Test Event"}],

@@ -46,7 +46,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_get_request(self):
         responses.add(
             responses.GET,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             json={"response": "ok"},
             status=200,
         )
@@ -58,7 +58,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_get_request_error(self):
         responses.add(
             responses.GET,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             status=400,
             json={"response": "not-ok"},
         )
@@ -69,7 +69,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_post_request(self):
         responses.add(
             responses.POST,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             json={"response": "ok"},
             status=200,
         )
@@ -81,7 +81,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_post_request_error(self):
         responses.add(
             responses.POST,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             status=400,
             json={"response": "not-ok"},
         )
@@ -92,7 +92,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_patch_request(self):
         responses.add(
             responses.PATCH,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             json={"response": "ok"},
             status=200,
         )
@@ -104,7 +104,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_patch_request_error(self):
         responses.add(
             responses.PATCH,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             status=400,
             json={"response": "not-ok"},
         )
@@ -115,7 +115,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_delete_request(self):
         responses.add(
             responses.DELETE,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             json={"response": "ok"},
             status=200,
         )
@@ -127,7 +127,7 @@ class TestApiClient(unittest.TestCase):
     def test_api_client_make_delete_request_error(self):
         responses.add(
             responses.DELETE,
-            "http://localhost/test",
+            f"{TEST_API_ENDPOINT}/test",
             status=400,
             json={"response": "not-ok"},
         )

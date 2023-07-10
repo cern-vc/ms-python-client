@@ -78,18 +78,19 @@ class TestMSApiClient(BaseTest):
     def test_get_request(self):
         responses.add(
             responses.GET,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
         response = self.client.make_get_request("/ms", {"test": "test"})
         assert response.status_code == 200
+        assert response.request.url == f"{TEST_API_ENDPOINT}/ms?test=test"
 
     @responses.activate
     def test_patch_request(self):
         responses.add(
             responses.PATCH,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
@@ -100,7 +101,7 @@ class TestMSApiClient(BaseTest):
     def test_post_request(self):
         responses.add(
             responses.POST,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
@@ -111,7 +112,7 @@ class TestMSApiClient(BaseTest):
     def test_delete_request(self):
         responses.add(
             responses.DELETE,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
@@ -131,7 +132,7 @@ class TestMSApiClientFromPath(BaseTest):
     def test_get_request(self):
         responses.add(
             responses.GET,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
@@ -142,7 +143,7 @@ class TestMSApiClientFromPath(BaseTest):
     def test_patch_request(self):
         responses.add(
             responses.PATCH,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
@@ -153,7 +154,7 @@ class TestMSApiClientFromPath(BaseTest):
     def test_post_request(self):
         responses.add(
             responses.POST,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
@@ -164,7 +165,7 @@ class TestMSApiClientFromPath(BaseTest):
     def test_delete_request(self):
         responses.add(
             responses.DELETE,
-            "http://localhost/ms",
+            f"{TEST_API_ENDPOINT}/ms",
             json={"response": "ok"},
             status=200,
         )
