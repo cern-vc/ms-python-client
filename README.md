@@ -132,14 +132,14 @@ cern_ms_client = CERNMSApiClient.init_from_dotenv()
 #### **events**:
 
 1. get all events
-2. get a single event using indico id
+2. get a single event using zoom id
 3. create an event
-4. update an event using indico id
-5. delete an event using indico id
+4. update an event using zoom id
+5. delete an event using zoom id
 
 You will find useful the `EventParameters` and `PartialEventParameters` classes, which will help you to create the events.
 
-- `INDICO_EVENT_ID` is the id of the event in the indico system which is **mandatory** to create an event.
+- `ZOOM_ID` is the id of the zoom meeting, which can be found inside the url of a meeting link, is **mandatory** to create an event.
 - `USER_ID` is the email of the Zoom Room.
 
 ```python
@@ -149,23 +149,23 @@ from ms_python_client.utils.event_generator import (EventParameters, PartialEven
 cern_ms_client = CERNMSApiClient.init_from_dotenv()
 
 USER_ID = os.getenv("USER_ID") # Which is the email of the Zoom Room
-INDICO_EVENT_ID = os.getenv("INDICO_EVENT_ID")
+ZOOM = os.getenv("ZOOM")
 
 event_parameters = EventParameters(
         subject="Test meeting",
         start_time="2021-10-01T12:00:00",
         end_time="2021-10-01T13:00:00",
         timezone="Europe/Zurich",
-        indico_event_id=INDICO_EVENT_ID,
+        zoom_id=ZOOM,
         zoom_url="https://cern.zoom.us/******",
 )
 
 partial_event_parameters = PartialEventParameters(
-        indico_event_id=INDICO_EVENT_ID,
+        zoom_id=ZOOM,
         end_time="2021-10-01T14:00:00",
 ) # You can update only the end_time of the event for example
 
 cern_ms_client.events.create_event(USER_ID, event_parameters)
-cern_ms_client.events.update_event_by_indico_id(USER_ID, partial_event_parameters)
-cern_ms_client.events.delete_event_by_indico_id(USER_ID, INDICO_EVENT_ID)
+cern_ms_client.events.update_event_by_zoom_id(USER_ID, partial_event_parameters)
+cern_ms_client.events.delete_event_by_zoom_id(USER_ID, ZOOM)
 ```
