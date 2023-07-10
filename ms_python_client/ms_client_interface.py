@@ -1,13 +1,13 @@
 import logging
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Mapping, Optional, TypeAlias
+from typing import Any, Mapping, Optional, TypeAlias
 
 import requests
 
 logger = logging.getLogger("ms_python_client")
 
 _Data: TypeAlias = Mapping[str, Any]
-_Headers: TypeAlias = Dict[str, str]
+_Headers: TypeAlias = Mapping[str, str]
 
 
 class MSClientInterface(ABC):

@@ -8,7 +8,10 @@ class EventsComponent:
         self.client = client
 
     def list_events(
-        self, user_id: str, parameters: Optional[Mapping[str, str]] = None
+        self,
+        user_id: str,
+        parameters: Optional[Mapping[str, str]] = None,
+        extra_headers: Optional[Mapping[str, str]] = None,
     ) -> dict:
         """List all the events of a user
 
@@ -19,10 +22,17 @@ class EventsComponent:
             dict: The response of the request
         """
         api_path = f"/users/{user_id}/calendar/events"
-        response = self.client.make_get_request(api_path, parameters)
+        response = self.client.make_get_request(
+            api_path, parameters, extra_headers=extra_headers
+        )
         return response.json()
 
-    def get_event(self, user_id: str, event_id: str) -> dict:
+    def get_event(
+        self,
+        user_id: str,
+        event_id: str,
+        extra_headers: Optional[Mapping[str, str]] = None,
+    ) -> dict:
         """Get an event of a user
 
         Args:
@@ -33,10 +43,15 @@ class EventsComponent:
             dict: The response of the request
         """
         api_path = f"/users/{user_id}/calendar/events/{event_id}"
-        response = self.client.make_get_request(api_path)
+        response = self.client.make_get_request(api_path, extra_headers=extra_headers)
         return response.json()
 
-    def create_event(self, user_id: str, data: Mapping[str, Any]) -> dict:
+    def create_event(
+        self,
+        user_id: str,
+        json: Mapping[str, Any],
+        extra_headers: Optional[Mapping[str, str]] = None,
+    ) -> dict:
         """Create an event for a user
 
         Args:
@@ -47,11 +62,17 @@ class EventsComponent:
             dict: The response of the request
         """
         api_path = f"/users/{user_id}/calendar/events"
-        response = self.client.make_post_request(api_path, data)
+        response = self.client.make_post_request(
+            api_path, json, extra_headers=extra_headers
+        )
         return response.json()
 
     def update_event(
-        self, user_id: str, event_id: str, data: Mapping[str, Any]
+        self,
+        user_id: str,
+        event_id: str,
+        json: Mapping[str, Any],
+        extra_headers: Optional[Mapping[str, str]] = None,
     ) -> dict:
         """Update an event for a user
 
@@ -64,10 +85,17 @@ class EventsComponent:
             dict: The response of the request
         """
         api_path = f"/users/{user_id}/calendar/events/{event_id}"
-        response = self.client.make_patch_request(api_path, data)
+        response = self.client.make_patch_request(
+            api_path, json, extra_headers=extra_headers
+        )
         return response.json()
 
-    def delete_event(self, user_id: str, event_id: str) -> None:
+    def delete_event(
+        self,
+        user_id: str,
+        event_id: str,
+        extra_headers: Optional[Mapping[str, str]] = None,
+    ) -> None:
         """Delete an event of a user
 
         Args:
@@ -78,4 +106,4 @@ class EventsComponent:
             dict: The response of the request
         """
         api_path = f"/users/{user_id}/calendar/events/{event_id}"
-        self.client.make_delete_request(api_path)
+        self.client.make_delete_request(api_path, extra_headers=extra_headers)

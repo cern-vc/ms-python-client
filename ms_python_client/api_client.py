@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, Mapping, Optional, TypeAlias
+from typing import Any, Mapping, Optional, TypeAlias
 
 from requests import RequestException, Response, Session
 from requests.adapters import HTTPAdapter
@@ -7,7 +7,7 @@ from urllib3 import Retry
 
 logger = logging.getLogger("ms_python_client")
 
-_Headers: TypeAlias = Dict[str, str]
+_Headers: TypeAlias = Mapping[str, str]
 _Data: TypeAlias = Mapping[str, Any]
 
 
@@ -30,12 +30,12 @@ class ApiClient:
         """Create the headers for a request appending the ones in the params
 
         Args:
-            extra_headers (dict): Dict of headers that will be appended to the default ones
+            extra_headers (dict): Mapping of headers that will be appended to the default ones
 
         Returns:
             dict: All the headers
         """
-        headers: _Headers = {}
+        headers: dict[str, str] = {}
         if extra_headers:
             headers.update(extra_headers)
         return headers
