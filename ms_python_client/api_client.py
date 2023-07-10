@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Mapping, Optional, TypeAlias
+from typing import Any, Mapping, Optional
 
 from requests import RequestException, Response, Session
 from requests.adapters import HTTPAdapter
@@ -7,8 +7,8 @@ from urllib3 import Retry
 
 logger = logging.getLogger("ms_python_client")
 
-_Headers: TypeAlias = Mapping[str, str]
-_Data: TypeAlias = Mapping[str, Any]
+_Headers = Mapping[str, str]
+_Data = Mapping[str, Any]
 
 
 class ApiClient:
