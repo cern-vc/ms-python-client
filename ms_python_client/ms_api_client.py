@@ -1,8 +1,7 @@
 import atexit
-import json
 import logging
 import os
-from typing import Any, Mapping, Optional
+from typing import Any, Dict, Mapping, Optional, TypeAlias
 
 import requests
 from msal import ConfidentialClientApplication, SerializableTokenCache
@@ -16,7 +15,8 @@ from ms_python_client.utils import init_from_env
 logging.getLogger("ms_python_client").addHandler(logging.NullHandler())
 logger = logging.getLogger("ms_python_client")
 
-TypeData = Mapping[str, Any]
+_Data: TypeAlias = Mapping[str, Any]
+_Headers: TypeAlias = Dict[str, str]
 
 
 class MSApiClient(MSClientInterface):
@@ -83,7 +83,7 @@ class MSApiClient(MSClientInterface):
             )
         self.init_components()
 
-    def build_headers(self) -> dict:
+    def build_headers(self, extra_headers: Optional[_Headers] = None) -> _Headers:
         if "MS_ACCESS_TOKEN" in os.environ:
             token = {
                 "access_token": os.environ["MS_ACCESS_TOKEN"],
@@ -104,6 +104,8 @@ class MSApiClient(MSClientInterface):
         headers = self.api_client.build_headers(
             extra_headers={"Authorization": f"Bearer {token['access_token']}"}
         )
+        if extra_headers:
+            headers.update(extra_headers)
         return headers
 
     def build_query_string_from_dict(
@@ -116,9 +118,12 @@ class MSApiClient(MSClientInterface):
         return query_string[:-1]
 
     def make_get_request(
-        self, api_path: str, parameters: Optional[Mapping[str, str]] = None
+        self,
+        api_path: str,
+        parameters: Optional[Mapping[str, str]] = None,
+        extra_headers: Optional[_Headers] = None,
     ) -> requests.Response:
-        headers = self.build_headers()
+        headers = self.build_headers(extra_headers)
         query_string = self.build_query_string_from_dict(parameters)
 
         response = self.api_client.make_get_request(
@@ -128,26 +133,32 @@ class MSApiClient(MSClientInterface):
 
         return response
 
-    def make_post_request(self, api_path: str, data: TypeData) -> requests.Response:
-        headers = self.build_headers()
+    def make_post_request(
+        self, api_path: str, json: _Data, extra_headers: Optional[_Headers] = None
+    ) -> requests.Response:
+        headers = self.build_headers(extra_headers)
 
         response = self.api_client.make_post_request(
-            api_path=api_path, headers=headers, data=json.dumps(data)
+            api_path=api_path, headers=headers, json=json
         )
 
         return response
 
-    def make_patch_request(self, api_path: str, data: TypeData) -> requests.Response:
-        headers = self.build_headers()
+    def make_patch_request(
+        self, api_path: str, json: _Data, extra_headers: Optional[_Headers] = None
+    ) -> requests.Response:
+        headers = self.build_headers(extra_headers)
 
         response = self.api_client.make_patch_request(
-            api_path=api_path, headers=headers, data=json.dumps(data)
+            api_path=api_path, headers=headers, json=json
         )
 
         return response
 
-    def make_delete_request(self, api_path: str) -> requests.Response:
-        headers = self.build_headers()
+    def make_delete_request(
+        self, api_path: str, extra_headers: Optional[_Headers] = None
+    ) -> requests.Response:
+        headers = self.build_headers(extra_headers)
 
         response = self.api_client.make_delete_request(
             api_path=api_path, headers=headers
