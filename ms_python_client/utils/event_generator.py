@@ -6,10 +6,10 @@ class BaseEventParameters(TypedDict):
     """Base parameters for creating an event
 
     Args:
-        indico_event_id (str): The indico event id
+        zoom_id (str): The zoom event id
     """
 
-    indico_event_id: str
+    zoom_id: str
 
 
 class OptionalTimezone(TypedDict, total=False):
@@ -66,8 +66,14 @@ def create_event_body(event_parameters: EventParameters) -> dict:
 
     timezone = event_parameters.get("timezone", "Europe/Zurich")
 
+    zoom_id_from_url = event_parameters["zoom_url"].split("/")[-1].split("?")[0]
+    if zoom_id_from_url != event_parameters["zoom_id"]:
+        raise ValueError(
+            "The zoom_id from the url does not match the zoom_id from the event parameters"
+        )
+
     return {
-        "subject": f"[{event_parameters['indico_event_id']}] {event_parameters['subject']}",
+        "subject": f"[{event_parameters['zoom_id']}] {event_parameters['subject']}",
         "body": {
             "contentType": "text",
             "content": f"Zoom URL: {event_parameters['zoom_url']}",
@@ -112,6 +118,11 @@ def create_partial_event_body(event_parameters: PartialEventParameters) -> dict:
     timezone = event_parameters.get("timezone", "Europe/Zurich")
 
     if "zoom_url" in event_parameters:
+        zoom_id_from_url = event_parameters["zoom_url"].split("/")[-1].split("?")[0]
+        if zoom_id_from_url != event_parameters["zoom_id"]:
+            raise ValueError(
+                "The zoom_id from the url does not match the zoom_id from the event parameters"
+            )
         event.update(
             {
                 "body": {
@@ -131,7 +142,7 @@ def create_partial_event_body(event_parameters: PartialEventParameters) -> dict:
     if "subject" in event_parameters:
         event.update(
             {
-                "subject": f"[{event_parameters['indico_event_id']}] {event_parameters['subject']}"
+                "subject": f"[{event_parameters['zoom_id']}] {event_parameters['subject']}"
             }
         )
 
