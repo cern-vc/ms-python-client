@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ms-python-client"
-version = "0.2.1"
+version = "1.0.0"
 exclude = ["tests*", "example*", ".github*", ".git*", ".vscode*"]
 description = "This package is used to interact with the microsoft graph API"
 authors = ["Samuel Guillemet <samuel.guillemet@telecom-sudparis.eu>"]
