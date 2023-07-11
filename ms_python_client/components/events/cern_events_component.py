@@ -4,6 +4,7 @@ from typing import Mapping, Optional
 from ms_python_client.components.events.events_component import EventsComponent
 from ms_python_client.ms_client_interface import MSClientInterface
 from ms_python_client.utils.event_generator import (
+    ZOOM_ID_EXTENDED_PROPERTY_ID,
     EventParameters,
     PartialEventParameters,
     create_event_body,
@@ -58,7 +59,13 @@ class CERNEventsComponents:
         Returns:
             dict: The response of the request
         """
-        parameters = {"$count": "true", "$filter": f"contains(subject,'{zoom_id}')"}
+        parameters = {
+            "$count": "true",
+            "$filter": f"singleValueExtendedProperties/Any(ep: ep/id eq \
+                '{ZOOM_ID_EXTENDED_PROPERTY_ID}' and ep/value eq '{zoom_id}')",
+            "$expand": f"singleValueExtendedProperties($filter=id eq \
+                '{ZOOM_ID_EXTENDED_PROPERTY_ID}')",
+        }
         response = self.events_component.list_events(user_id, parameters, extra_headers)
 
         count = response.get("@odata.count", 0)

@@ -54,6 +54,11 @@ class PartialEventParameters(BaseEventParameters, OptionalTimezone, total=False)
     end_time: str
 
 
+ZOOM_ID_EXTENDED_PROPERTY_ID = (
+    "String {d3123b00-8eb5-4f10-ae88-1269fe4cbaf0} Name ZoomId"
+)
+
+
 def create_event_body(event_parameters: EventParameters) -> dict:
     """Creates an event from the given parameters
 
@@ -73,11 +78,7 @@ def create_event_body(event_parameters: EventParameters) -> dict:
         )
 
     return {
-        "subject": f"[{event_parameters['zoom_id']}] {event_parameters['subject']}",
-        "body": {
-            "contentType": "text",
-            "content": f"Zoom URL: {event_parameters['zoom_url']}",
-        },
+        "subject": event_parameters["subject"],
         "start": {
             "dateTime": datetime.datetime.fromisoformat(
                 event_parameters["start_time"]
@@ -101,6 +102,12 @@ def create_event_body(event_parameters: EventParameters) -> dict:
         "isOnlineMeeting": True,
         "onlineMeetingProvider": "unknown",
         "onlineMeetingUrl": event_parameters["zoom_url"],
+        "singleValueExtendedProperties": [
+            {
+                "id": ZOOM_ID_EXTENDED_PROPERTY_ID,
+                "value": event_parameters["zoom_id"],
+            }
+        ],
     }
 
 
@@ -125,10 +132,6 @@ def create_partial_event_body(event_parameters: PartialEventParameters) -> dict:
             )
         event.update(
             {
-                "body": {
-                    "contentType": "text",
-                    "content": f"Zoom URL: {event_parameters['zoom_url']}",
-                },
                 "location": {
                     "displayName": event_parameters["zoom_url"],
                     "locationType": "default",
@@ -142,7 +145,7 @@ def create_partial_event_body(event_parameters: PartialEventParameters) -> dict:
     if "subject" in event_parameters:
         event.update(
             {
-                "subject": f"[{event_parameters['zoom_id']}] {event_parameters['subject']}"
+                "subject": event_parameters["subject"],
             }
         )
 
