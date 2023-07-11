@@ -1,6 +1,6 @@
 import responses
 
-from ms_python_client.components.events.users_component import UsersComponent
+from ms_python_client.components.users.users_component import UsersComponent
 from ms_python_client.ms_api_client import MSApiClient
 from tests.ms_python_client.base_test_case import TEST_API_ENDPOINT, BaseTest, mock_msal
 
