@@ -20,11 +20,7 @@ def test_create_event_body():
     result = create_event_body(parameters)
 
     assert result == {
-        "subject": "[1234567890] Test Event",
-        "body": {
-            "contentType": "text",
-            "content": "Zoom URL: https://zoom.us/j/1234567890",
-        },
+        "subject": "Test Event",
         "start": {"dateTime": "2021-01-01T00:00:00", "timeZone": "Europe/Zurich"},
         "end": {"dateTime": "2021-01-01T01:00:00", "timeZone": "Europe/Zurich"},
         "location": {
@@ -38,6 +34,12 @@ def test_create_event_body():
         "isOnlineMeeting": True,
         "onlineMeetingProvider": "unknown",
         "onlineMeetingUrl": "https://zoom.us/j/1234567890",
+        "singleValueExtendedProperties": [
+            {
+                "id": "String {d3123b00-8eb5-4f10-ae88-1269fe4cbaf0} Name ZoomId",
+                "value": "1234567890",
+            }
+        ],
     }
 
 
@@ -73,10 +75,6 @@ def test_create_partial_event_body_1():
     result = create_partial_event_body(parameters)
 
     assert result == {
-        "body": {
-            "contentType": "text",
-            "content": "Zoom URL: https://zoom.us/j/1234567890",
-        },
         "location": {
             "displayName": "https://zoom.us/j/1234567890",
             "locationType": "default",
@@ -96,7 +94,7 @@ def test_create_partial_event_body_2():
     result = create_partial_event_body(parameters)
 
     assert result == {
-        "subject": "[1234567890] Test Event",
+        "subject": "Test Event",
     }
 
 

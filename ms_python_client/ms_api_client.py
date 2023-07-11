@@ -8,7 +8,7 @@ from msal import ConfidentialClientApplication, SerializableTokenCache
 
 from ms_python_client.api_client import ApiClient
 from ms_python_client.components.events.events_component import EventsComponent
-from ms_python_client.components.events.users_component import UsersComponent
+from ms_python_client.components.users.users_component import UsersComponent
 from ms_python_client.ms_client_interface import MSClientInterface
 from ms_python_client.utils import init_from_env
 
