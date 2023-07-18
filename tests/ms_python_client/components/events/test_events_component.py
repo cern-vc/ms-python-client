@@ -47,7 +47,9 @@ class TestEventsComponent(BaseTest):
         headers = {
             "test": "test",
         }
-        event = self.events_component.get_event("user_id", "event_id", headers)
+        event = self.events_component.get_event(
+            "user_id", "event_id", extra_headers=headers
+        )
         assert event["response"] == "ok"
         assert responses.calls[0].request.headers["test"] == "test"
 

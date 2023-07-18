@@ -81,6 +81,30 @@ class CERNEventsComponents:
 
         return response.get("value", [])[0]
 
+    def get_event_zoom_id(
+        self,
+        user_id: str,
+        event_id: str,
+        extra_headers: Optional[Mapping[str, str]] = None,
+    ) -> str:
+        """Get the zoom id of an event of a user
+
+        Args:
+            event_id (str): The event id
+
+        Returns:
+            str: The zoom id of the event
+        """
+        parameters = {
+            "$expand": f"singleValueExtendedProperties($filter=id eq \
+                '{ZOOM_ID_EXTENDED_PROPERTY_ID}')",
+        }
+        response = self.events_component.get_event(
+            user_id, event_id, parameters, extra_headers
+        )
+
+        return response["singleValueExtendedProperties"][0]["value"]
+
     def create_event(
         self,
         user_id: str,

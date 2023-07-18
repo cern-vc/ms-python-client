@@ -146,3 +146,29 @@ class TestEventsComponent(BaseTest):
         }
         self.events_component.delete_event_by_zoom_id("user_id", "zoom_id", headers)
         assert responses.calls[0].request.headers["test"] == "test"
+
+    @responses.activate
+    def test_get_event_zoom_id(self):
+        responses.add(
+            responses.GET,
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events/event_id",
+            json={
+                "id": "event_id",
+                "subject": "Test Event",
+                "singleValueExtendedProperties": [
+                    {
+                        "id": "String {66f5a359-4659-4830-9070-00040ec6ac6e} Name ZoomId",
+                        "value": "1234567890",
+                    }
+                ],
+            },
+            status=200,
+        )
+        headers = {
+            "test": "test",
+        }
+        zoom_id = self.events_component.get_event_zoom_id(
+            "user_id", "event_id", headers
+        )
+        assert zoom_id == "1234567890"
+        assert responses.calls[0].request.headers["test"] == "test"

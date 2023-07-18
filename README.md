@@ -140,6 +140,7 @@ cern_ms_client = CERNMSApiClient.init_from_dotenv()
 3. create an event
 4. update an event using zoom id
 5. delete an event using zoom id
+6. get the zoom id of an event
 
 You will find useful the `EventParameters` and `PartialEventParameters` classes, which will help you to create the events.
 

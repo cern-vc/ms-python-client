@@ -31,6 +31,7 @@ class EventsComponent:
         self,
         user_id: str,
         event_id: str,
+        parameters: Optional[Mapping[str, str]] = None,
         extra_headers: Optional[Mapping[str, str]] = None,
     ) -> dict:
         """Get an event of a user
@@ -43,7 +44,9 @@ class EventsComponent:
             dict: The response of the request
         """
         api_path = f"/users/{user_id}/calendar/events/{event_id}"
-        response = self.client.make_get_request(api_path, extra_headers=extra_headers)
+        response = self.client.make_get_request(
+            api_path, parameters=parameters, extra_headers=extra_headers
+        )
         return response.json()
 
     def create_event(
