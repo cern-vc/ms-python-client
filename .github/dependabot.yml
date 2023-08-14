@@ -12,3 +12,10 @@ updates:
     target-branch: "develop"
     commit-message:
       prefix: "⬆ "
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "develop"
+    commit-message:
+      prefix: "⬆ "
