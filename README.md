@@ -2,7 +2,7 @@
 
 [![Python tests](https://github.com/cern-vc/ms-python-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/python-tests.yml)
 [![pPre-commit](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml)
-[![CodeQL](https://github.com/cern-vc/ms-python-client/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/cern-vc/ms-python-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/github-code-scanning/codeql)
 [![codecov](https://codecov.io/gh/cern-vc/MS-python-client/branch/main/graph/badge.svg?token=04EY0K0P2S)](https://codecov.io/gh/cern-vc/MS-python-client)
 
 ![Publish](https://img.shields.io/github/actions/workflow/status/cern-vc/ms-python-client/release-on-push.yml?logo=python&label=Publish&color=0E7FC0)
