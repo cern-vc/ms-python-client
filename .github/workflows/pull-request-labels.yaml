@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -21,19 +21,19 @@ jobs:
 
       - name: Get the label to add
         id: get_label
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const labels = ["release:patch", "release:minor", "release:major"];
-            const last_release = await github.repos.getLatestRelease({
+            const labels = ["release:patch", "release:minor", "release:major", "norelease"];
+            const last_release = await github.rest.repos.getLatestRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
             });
             const last_release_tag = last_release.data.tag_name;
             const last_release_version = last_release_tag.replace("v", "");
             if (last_release_version === process.env.VERSION) {
-                core.setFailed("The version has not been bumped");
+                core.setOutput("label", labels[3]);
             } else {
                 const last_release_version_split = last_release_version.split(".");
                 const current_version_split = process.env.VERSION.split(".");

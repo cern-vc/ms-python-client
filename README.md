@@ -1,9 +1,14 @@
 # Microsoft Python client
 
 [![Python tests](https://github.com/cern-vc/ms-python-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/python-tests.yml)
-[![pre-commit](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml)
-[![CodeQL](https://github.com/cern-vc/ms-python-client/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/codeql-analysis.yml)
+[![pPre-commit](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml)
+[![CodeQL](https://github.com/cern-vc/ms-python-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/github-code-scanning/codeql)
 [![codecov](https://codecov.io/gh/cern-vc/MS-python-client/branch/main/graph/badge.svg?token=04EY0K0P2S)](https://codecov.io/gh/cern-vc/MS-python-client)
+
+![Publish](https://img.shields.io/github/actions/workflow/status/cern-vc/ms-python-client/release-on-push.yml?logo=python&label=Publish&color=0E7FC0)
+![PyPI - Version](https://img.shields.io/pypi/v/ms-python-client?logo=python)
+![PyPI - Download](https://img.shields.io/pypi/dm/ms-python-client?logo=python&color=0E7FC0)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ms-python-client?logo=python&color=0E7FC0)
 
 Microsoft graph API Python client with support for [Server to Server Oauth tokens](https://learn.microsoft.com/en-us/graph/auth/auth-concepts?view=graph-rest-1.0) with App Only access.
 

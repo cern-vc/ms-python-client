@@ -1,6 +1,6 @@
 # This workflow aims to release a new version of the project when a commit is pushed to the main branch.
 
-name: Release on push to main branch
+name: Release and publish
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         id: release
         uses: rymndhng/release-on-push-action@master
         with:
-          bump_version_scheme: patch
+          bump_version_scheme: norelease
           tag_prefix: v
           release_name: <RELEASE_TAG>
           max_commits: 25
@@ -26,3 +26,15 @@ jobs:
     outputs:
       tag_name: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
+
+  publish-on-release:
+    needs: release-on-push
+    if: needs.release-on-push.outputs.version != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and publish to pypi
+        uses: JRubics/poetry-publish@v1.17
+        with:
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
+          ignore_dev_requirements: "yes"
