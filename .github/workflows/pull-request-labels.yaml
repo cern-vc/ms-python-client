@@ -26,7 +26,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const labels = ["release:patch", "release:minor", "release:major", "norelease"];
-            const last_release = await github.repos.getLatestRelease({
+            const last_release = await github.rest.repos.getLatestRelease({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
             });
