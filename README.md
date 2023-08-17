@@ -1,11 +1,11 @@
 # Microsoft Python client
 
 [![Python tests](https://github.com/cern-vc/ms-python-client/actions/workflows/python-tests.yml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/python-tests.yml)
-[![pPre-commit](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml)
+[![Pre-commit](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/pre-commit.yaml)
 [![CodeQL](https://github.com/cern-vc/ms-python-client/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/cern-vc/ms-python-client/actions/workflows/github-code-scanning/codeql)
 [![codecov](https://codecov.io/gh/cern-vc/MS-python-client/branch/main/graph/badge.svg?token=04EY0K0P2S)](https://codecov.io/gh/cern-vc/MS-python-client)
 
-![Publish](https://img.shields.io/github/actions/workflow/status/cern-vc/ms-python-client/release-on-push.yml?logo=python&label=Publish&color=0E7FC0)
+![Build](https://img.shields.io/github/actions/workflow/status/cern-vc/ms-python-client/build.yml?logo=python&label=Publish&color=0E7FC0)
 ![PyPI - Version](https://img.shields.io/pypi/v/ms-python-client?logo=python)
 ![PyPI - Download](https://img.shields.io/pypi/dm/ms-python-client?logo=python&color=0E7FC0)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ms-python-client?logo=python&color=0E7FC0)

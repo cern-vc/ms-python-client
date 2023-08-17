@@ -27,14 +27,15 @@ jobs:
       tag_name: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
 
-  publish-on-release:
+  store-version:
     needs: release-on-push
-    if: needs.release-on-push.outputs.version != ''
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Build and publish to pypi
-        uses: JRubics/poetry-publish@v1.17
+      - name: Save version
+        run: |
+          mkdir -p ./version
+          echo "${{ needs.release-on-push.outputs.version }}" > ./version/version_number
+      - uses: actions/upload-artifact@v3
         with:
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
-          ignore_dev_requirements: "yes"
+          name: version_number
+          path: ./version
