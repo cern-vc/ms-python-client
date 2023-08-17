@@ -1,6 +1,6 @@
 # This workflow aims to release a new version of the project when a commit is pushed to the main branch.
 
-name: Release and publish
+name: Release on push to main branch
 
 on:
   push:
