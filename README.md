@@ -10,7 +10,7 @@
 ![PyPI - Download](https://img.shields.io/pypi/dm/ms-python-client?logo=python&color=0E7FC0)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ms-python-client?logo=python&color=0E7FC0)
 
-Microsoft graph API Python client with support for [Server to Server Oauth tokens](https://learn.microsoft.com/en-us/graph/auth/auth-concepts?view=graph-rest-1.0) with App Only access.
+Microsoft graph API Python client with support for [Device Flow Oauth tokens](https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-device-code) with deleguated access.
 
 ## Install
 
@@ -22,7 +22,7 @@ pip install ms-python-client
 
 ## Requirements
 
-- Python >= 3.10
+- Python >= 3.9
 
 ## How to configure the client variables to make API calls
 
