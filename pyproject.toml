@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "ms-python-client"
-version = "1.0.4"
+version = "2.0.0"
 exclude = ["tests*", "example*", ".github*", ".git*", ".vscode*"]
 description = "This package is used to interact with the microsoft graph API"
 authors = ["Samuel Guillemet <samuel.guillemet@telecom-sudparis.eu>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "ms_python_client"}]
+packages = [{ include = "ms_python_client" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
