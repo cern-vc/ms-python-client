@@ -6,10 +6,12 @@ import sys
 
 from requests import HTTPError
 
-from ms_python_client.cern_ms_api_client import CERNMSApiClient
-from ms_python_client.utils.error import generate_error_log
-from ms_python_client.utils.event_generator import PartialEventParameters
-from ms_python_client.utils.logger import setup_logs
+from ms_python_client import (
+    CERNMSApiClient,
+    PartialEventParameters,
+    generate_error_log,
+    setup_logs,
+)
 
 logger = setup_logs(log_level=logging.INFO)
 
@@ -27,16 +29,14 @@ start_time = datetime.datetime.now() + datetime.timedelta(hours=1)
 end_time = start_time + datetime.timedelta(hours=1)
 
 data = PartialEventParameters(
-    zoom_id=ZOOM_ID,
     start_time=start_time.isoformat(timespec="seconds"),
     end_time=end_time.isoformat(timespec="seconds"),
     # timezone= Set by default to Europe/Zurich
     # subject= Could be updated as well
-    # zoom_url= Could be updated as well
 )
 
 try:
-    result = cern_ms_client.events.update_event_by_zoom_id(USER_ID, data)
+    result = cern_ms_client.events.update_event_by_zoom_id(USER_ID, ZOOM_ID, data)
     print(json.dumps(result, indent=4))
 
 except HTTPError as e:

@@ -5,9 +5,7 @@ import sys
 
 from requests import HTTPError
 
-from ms_python_client.cern_ms_api_client import CERNMSApiClient
-from ms_python_client.utils.error import generate_error_log
-from ms_python_client.utils.logger import setup_logs
+from ms_python_client import CERNMSApiClient, generate_error_log, setup_logs
 
 logger = setup_logs(log_level=logging.INFO)
 

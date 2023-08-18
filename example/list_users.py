@@ -5,9 +5,7 @@ import sys
 
 from requests import HTTPError
 
-from ms_python_client.ms_api_client import MSApiClient
-from ms_python_client.utils.error import generate_error_log
-from ms_python_client.utils.logger import setup_logs
+from ms_python_client import MSApiClient, generate_error_log, setup_logs
 
 logger = setup_logs(log_level=logging.INFO)
 
@@ -15,7 +13,7 @@ cern_ms_client = MSApiClient.init_from_dotenv()
 
 query = {"$count": "true"}
 
-DISPLAY_NAME = os.getenv("DISPLAY_NAME")
+DISPLAY_NAME = os.getenv("DISPLAY_NAME", "Zoom Room")
 
 if DISPLAY_NAME:
     query.update({"$search": f'"displayName:{DISPLAY_NAME}"'})
@@ -29,7 +27,9 @@ try:
     print(f"Found {count} users:")
 
     for event in result.get("value", []):
-        print(f"\t- {event['displayName']} - {event['id']}")
+        print(
+            f"\t- {event['displayName']} - {event['id']} - {event['userPrincipalName']}"
+        )
 
 except HTTPError as e:
     print(json.dumps(generate_error_log(e), indent=4))

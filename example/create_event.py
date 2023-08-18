@@ -6,10 +6,12 @@ import sys
 
 from requests import HTTPError
 
-from ms_python_client.cern_ms_api_client import CERNMSApiClient
-from ms_python_client.utils.error import generate_error_log
-from ms_python_client.utils.event_generator import EventParameters
-from ms_python_client.utils.logger import setup_logs
+from ms_python_client import (
+    CERNMSApiClient,
+    EventParameters,
+    generate_error_log,
+    setup_logs,
+)
 
 logger = setup_logs(log_level=logging.INFO)
 
@@ -28,7 +30,6 @@ start_time = datetime.datetime.now() + datetime.timedelta(minutes=15)
 end_time = start_time + datetime.timedelta(hours=1)
 
 data = EventParameters(
-    zoom_id=ZOOM_ID,
     subject="Test event",
     zoom_url=ZOOM_URL,
     timezone="Europe/Zurich",
@@ -37,7 +38,7 @@ data = EventParameters(
 )
 
 try:
-    result = cern_ms_client.events.create_event(USER_ID, data)
+    result = cern_ms_client.events.create_event(USER_ID, ZOOM_ID, data)
     print(json.dumps(result, indent=4))
 
 except HTTPError as e:
