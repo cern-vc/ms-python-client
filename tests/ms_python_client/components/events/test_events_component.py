@@ -8,11 +8,9 @@ from tests.ms_python_client.base_test_case import TEST_API_ENDPOINT, BaseTest, m
 class TestEventsComponent(BaseTest):
     @mock_msal()
     def setUp(self) -> None:
-        ms_client = MSApiClient(
-            "account_id", "client_id", "client_secret", api_endpoint=TEST_API_ENDPOINT
-        )
+        super().setUp()
+        ms_client = MSApiClient(self.config, api_endpoint=TEST_API_ENDPOINT)
         self.events_component = EventsComponent(ms_client)
-        return super().setUp()
 
     @responses.activate
     def test_list_events(self):

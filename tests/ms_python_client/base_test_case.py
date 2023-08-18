@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+from ms_python_client.utils.init_from_env import init_from_dotenv, init_from_env
 from ms_python_client.utils.logger import setup_logs
 
 MOCK_TOKEN = "mock_token"
@@ -13,22 +14,20 @@ TEST_API_ENDPOINT = "http://localhost"
 setup_logs(log_level=logging.DEBUG)
 
 
-def mock_confidential_client_application(mock_instance, cache_disabled: bool):
+def mock_oauth2_flow(mock_instance):
     # Configure the return value of the methods you want to mock
-    mock_instance.acquire_token_silent.return_value = (
-        {"access_token": MOCK_TOKEN} if not cache_disabled else None
-    )
-    mock_instance.acquire_token_for_client.return_value = {"access_token": MOCK_TOKEN}
+    # Make the __init__ method return the mock instance
+    mock_instance.get_access_token.return_value = (MOCK_TOKEN, "username")
+    mock_instance.__class__.get_access_token = mock_instance.get_access_token
+    mock_instance.__class__.__init__ = lambda self: None
 
 
-def mock_msal(cache_enabled=True):
+def mock_msal():
     def decorator(func):
         def wrapper(*args, **kwargs):
-            with patch(
-                "ms_python_client.ms_api_client.ConfidentialClientApplication"
-            ) as mock_cca:
-                mock_instance = mock_cca.return_value
-                mock_confidential_client_application(mock_instance, not cache_enabled)
+            with patch("ms_python_client.ms_api_client.Oauth2Flow") as mock_oauth:
+                mock_instance = mock_oauth.return_value
+                mock_oauth2_flow(mock_instance)
                 return func(*args, **kwargs)
 
         return wrapper
@@ -41,11 +40,12 @@ class BaseTest(unittest.TestCase):
         self.test_dir = tempfile.mkdtemp()
         shutil.copy(".env.sample", self.test_dir)
         self.env_file = os.path.join(self.test_dir, ".env.sample")
+        init_from_dotenv(custom_dotenv=self.env_file)
+        self.config = init_from_env()
 
-        os.environ.pop("MS_ACCOUNT_ID", None)
-        os.environ.pop("MS_CLIENT_ID", None)
-        os.environ.pop("MS_CLIENT_SECRET", None)
-        os.environ.pop("MS_ACCESS_TOKEN", None)
+        os.environ.pop("AZURE_AUTHORITY", None)
+        os.environ.pop("AZURE_CLIENT_ID", None)
+        os.environ.pop("AZURE_SCOPE", None)
 
     def tearDown(self) -> None:
         shutil.rmtree(self.test_dir)
