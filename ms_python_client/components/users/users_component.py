@@ -1,6 +1,6 @@
 from typing import Mapping, Optional
 
-from ms_python_client.ms_client_interface import MSClientInterface
+from ms_python_client.interfaces.ms_client_interface import MSClientInterface
 
 
 class UsersComponent:

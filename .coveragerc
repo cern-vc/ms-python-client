@@ -1,2 +1,2 @@
 [run]
-omit = ms_python_client/ms_client_interface.py
+omit = ms_python_client/interfaces/ms_client_interface.py, ms_python_client/services/oauth2_flow.py
