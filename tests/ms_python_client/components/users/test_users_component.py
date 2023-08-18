@@ -9,9 +9,7 @@ class TestUsersComponent(BaseTest):
     @mock_msal()
     def setUp(self) -> None:
         super().setUp()
-        ms_client = MSApiClient(
-            "account_id", "client_id", "client_secret", api_endpoint=TEST_API_ENDPOINT
-        )
+        ms_client = MSApiClient(self.config, api_endpoint=TEST_API_ENDPOINT)
         self.events_component = UsersComponent(ms_client)
 
     @responses.activate

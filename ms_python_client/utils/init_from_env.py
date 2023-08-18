@@ -1,9 +1,9 @@
 import logging
 import os
-from typing import Any, Optional, TypedDict
 
 from dotenv import load_dotenv
 
+from ms_python_client.config import Config
 from ms_python_client.utils.file_system import get_project_dir
 
 logger = logging.getLogger("ms_python_client")
@@ -13,24 +13,22 @@ class MSClientEnvError(Exception):
     pass
 
 
-class ReturnType(TypedDict):
-    account_id: str
-    client_id: str
-    client_secret: Any
-    use_path: Optional[str]
-
-
-def init_from_env(use_path: Optional[str] = None) -> ReturnType:
+def init_from_env() -> Config:
     try:
-        account_id = os.environ["MS_ACCOUNT_ID"]
-        client_id = os.environ["MS_CLIENT_ID"]
-        client_secret = os.environ["MS_CLIENT_SECRET"]
-        return ReturnType(
-            account_id=account_id,
-            client_id=client_id,
-            client_secret=client_secret,
-            use_path=use_path,
+        azure_authority = os.environ["AZURE_AUTHORITY"]
+        azure_client_id = os.environ["AZURE_CLIENT_ID"]
+        azure_scope_str = os.environ["AZURE_SCOPE"]
+
+        token_cache_file = os.environ.get("TOKEN_CACHE_FILE", "token_cache.bin")
+        azure_scope = azure_scope_str.split(",")
+
+        return Config(
+            token_cache_file=token_cache_file,
+            azure_authority=azure_authority,
+            azure_client_id=azure_client_id,
+            azure_scope=azure_scope,
         )
+
     except KeyError as error:
         raise MSClientEnvError(f"Required key not in environment: {error}") from error
 

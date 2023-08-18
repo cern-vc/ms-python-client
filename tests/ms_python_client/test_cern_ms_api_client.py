@@ -7,9 +7,11 @@ from tests.ms_python_client.base_test_case import BaseTest, mock_msal
 class TestCERNMSApiClientInit(BaseTest):
     @mock_msal()
     def test_init_from_env(self):
-        os.environ["MS_ACCOUNT_ID"] = "aaa"
-        os.environ["MS_CLIENT_ID"] = "bbb"
-        os.environ["MS_CLIENT_SECRET"] = "ccc"
+        os.environ[
+            "AZURE_AUTHORITY"
+        ] = "https://login.microsoftonline.com/organizations"
+        os.environ["AZURE_CLIENT_ID"] = "test"
+        os.environ["AZURE_SCOPE"] = "Scope1,Scope2"
 
         client = CERNMSApiClient.init_from_env()
 

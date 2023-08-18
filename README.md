@@ -30,9 +30,9 @@ pip install ms-python-client
 
 Define the following variables in your `env` or your `.env` file:
 
-- MS_ACCOUNT_ID
-- MS_CLIENT_ID
-- MS_CLIENT_SECRET
+- AZURE_AUTHORITY
+- AZURE_CLIENT_ID
+- AZURE_SCOPE
 
 #### For testing purposes
 
@@ -47,7 +47,7 @@ This token could be obtained from the [Microsoft Graph Explorer](https://develop
 ### Initialize the MSApiClient from environment variables
 
 ```python
-from ms_python_client.ms_api_client import MSApiClient
+from ms_python_client import MSApiClient
 
 ms_client = MSApiClient.init_from_env()
 ```
@@ -55,7 +55,7 @@ ms_client = MSApiClient.init_from_env()
 ### Initialize the MSApiClient from .env
 
 ```python
-from ms_python_client.ms_api_client import MSApiClient
+from ms_python_client import MSApiClient
 
 ms_client = MSApiClient.init_from_dotenv()
 ```
@@ -63,29 +63,39 @@ ms_client = MSApiClient.init_from_dotenv()
 ### Initialize the MSApiClient manually
 
 ```python
-from ms_python_client.ms_api_client import MSApiClient
+from ms_python_client import MSApiClient,  Config
+
+config = Config(
+    azure_authority="<YOUR AZURE AUTHORITY>",
+    azure_client_id="<YOUR AZURE CLIENT ID>",
+    azure_scope="<YOUR AZURE SCOPE>" # Ex. [User.Read, Calendars.ReadWrite, etc.]
+)
 
 ms_client = MSApiClient(
-        account_id="<YOUR ACCOUNT ID>",
-        client_id="<YOUR CLIENT ID>",
-        client_secret="<YOUR CLIENT SECRET>")
+    config=config,
+)
 ```
 
-### Use the file system to store the access token instead of environment
+#### Store of the cache token
 
-There are some cases where you might want to store the access token in the file system in order to share its value with other elements of the application (Ex. different pods on a Kubernetes/Openshift application).
-
-You can define the path where the token will be stored, passing the `use_path` variable to the constructor:
+By default the token is stored in a file called `token_cache.bin` in the current directory. You can change this behavior by passing the `token_cache_file` parameter to the `Config` constructor.
 
 ```python
-from ms_python_client.ms_api_client import MSApiClient
+from ms_python_client import MSApiClient, Config
+
+config = Config(
+    azure_authority="<YOUR AZURE AUTHORITY>",
+    azure_client_id="<YOUR AZURE CLIENT ID>",
+    azure_scope="<YOUR AZURE SCOPE>", # Ex. [User.Read, Calendars.ReadWrite, etc.]
+    token_cache_file="/path/to/token_cache.bin"
+)
 
 ms_client = MSApiClient(
-        account_id="<YOUR ACCOUNT ID>",
-        client_id="<YOUR CLIENT ID>",
-        client_secret="<YOUR CLIENT SECRET>",
-        use_path="/path/to/token/folder")
+    config=config,
+)
 ```
+
+This will allow you to reuse the token in the next executions of your script and even in different scripts.
 
 ## How to make API calls
 
@@ -100,7 +110,7 @@ result = cern_ms_client.events.list_events(USER_ID, query)
 ## Optional: How to configure the logging
 
 ```python
-from ms_python_client.utils.logger import setup_logs
+from ms_python_client import setup_logs
 
 setup_logs(log_level=logging.DEBUG)
 ```
@@ -119,6 +129,8 @@ setup_logs(log_level=logging.DEBUG)
 
 1. get all users
 
+---
+
 ## CERN specific usage
 
 Instead of using the `MSApiClient` class, you can use the `CERNMSApiClient` class, which is a subclass of the `MSApiClient` class.
@@ -131,7 +143,7 @@ This will be used in the context of synchronizing the events between the CERN In
 Follow the [How to configure the client variables to make API calls](#how-to-configure-the-client-variables-to-make-api-calls) section and then:
 
 ```python
-from ms_python_client.cern_ms_api_client import CERNMSApiClient
+from ms_python_client import CERNMSApiClient
 
 cern_ms_client = CERNMSApiClient.init_from_dotenv()
 ```
@@ -149,12 +161,13 @@ cern_ms_client = CERNMSApiClient.init_from_dotenv()
 
 You will find useful the `EventParameters` and `PartialEventParameters` classes, which will help you to create the events.
 
+The `EventParameters` class is used to create an event, while the `PartialEventParameters` class is used to update an event.
+
 - `ZOOM_ID` is the id of the zoom meeting, which can be found inside the url of a meeting link. This is **mandatory** to create an event.
 - `USER_ID` is the email of the Zoom Room.
 
 ```python
-from ms_python_client.cern_ms_api_client import CERNMSApiClient
-from ms_python_client.utils.event_generator import (EventParameters, PartialEventParameters)
+from ms_python_client import CERNMSApiClient, EventParameters, PartialEventParameters
 
 cern_ms_client = CERNMSApiClient.init_from_dotenv()
 
@@ -166,16 +179,14 @@ event_parameters = EventParameters(
         start_time="2021-10-01T12:00:00",
         end_time="2021-10-01T13:00:00",
         timezone="Europe/Zurich",
-        zoom_id=ZOOM_ID,
         zoom_url="https://cern.zoom.us/******",
 )
 
 partial_event_parameters = PartialEventParameters(
-        zoom_id=ZOOM_ID,
         end_time="2021-10-01T14:00:00",
 ) # You can update only the end_time of the event for example
 
-cern_ms_client.events.create_event(USER_ID, event_parameters)
-cern_ms_client.events.update_event_by_zoom_id(USER_ID, partial_event_parameters)
+cern_ms_client.events.create_event(USER_ID, ZOOM_ID, event_parameters)
+cern_ms_client.events.update_event_by_zoom_id(USER_ID, ZOOM_ID, partial_event_parameters)
 cern_ms_client.events.delete_event_by_zoom_id(USER_ID, ZOOM_ID)
 ```
