@@ -16,11 +16,9 @@ from tests.ms_python_client.base_test_case import TEST_API_ENDPOINT, BaseTest, m
 class TestEventsComponent(BaseTest):
     @mock_msal()
     def setUp(self) -> None:
-        cern_ms_client = CERNMSApiClient(
-            "account_id", "client_id", "client_secret", api_endpoint=TEST_API_ENDPOINT
-        )
+        super().setUp()
+        cern_ms_client = CERNMSApiClient(self.config, api_endpoint=TEST_API_ENDPOINT)
         self.events_component = CERNEventsComponents(cern_ms_client)
-        return super().setUp()
 
     @responses.activate
     def test_list_events(self):
@@ -80,7 +78,6 @@ class TestEventsComponent(BaseTest):
         )
         event_parameters = EventParameters(
             zoom_url="https://zoom.us/j/1234567890",
-            zoom_id="1234567890",
             subject="Test Event",
             start_time="2021-01-01T00:00:00",
             end_time="2021-01-01T01:00:00",
@@ -88,7 +85,9 @@ class TestEventsComponent(BaseTest):
         headers = {
             "test": "test",
         }
-        event = self.events_component.create_event("user_id", event_parameters, headers)
+        event = self.events_component.create_event(
+            "user_id", "1234567890", event_parameters, headers
+        )
         assert event["response"] == "ok"
         assert responses
 
@@ -110,8 +109,6 @@ class TestEventsComponent(BaseTest):
             status=200,
         )
         event_parameters = PartialEventParameters(
-            zoom_url="https://zoom.us/j/1234567890",
-            zoom_id="1234567890",
             subject="Test Event",
             start_time="2021-01-01T00:00:00",
             end_time="2021-01-01T01:00:00",
@@ -120,7 +117,7 @@ class TestEventsComponent(BaseTest):
             "test": "test",
         }
         event = self.events_component.update_event_by_zoom_id(
-            "user_id", event_parameters, headers
+            "user_id", "1234567890", event_parameters, headers
         )
         assert event["response"] == "ok"
         assert responses.calls[0].request.headers["test"] == "test"

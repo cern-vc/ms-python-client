@@ -2,7 +2,7 @@ import logging
 from typing import Mapping, Optional
 
 from ms_python_client.components.events.events_component import EventsComponent
-from ms_python_client.ms_client_interface import MSClientInterface
+from ms_python_client.interfaces.ms_client_interface import MSClientInterface
 from ms_python_client.utils.event_generator import (
     ZOOM_ID_EXTENDED_PROPERTY_ID,
     EventParameters,
@@ -108,6 +108,7 @@ class CERNEventsComponents:
     def create_event(
         self,
         user_id: str,
+        zoom_id: str,
         event: EventParameters,
         extra_headers: Optional[Mapping[str, str]] = None,
     ) -> dict:
@@ -120,12 +121,13 @@ class CERNEventsComponents:
         Returns:
             dict: The response of the request
         """
-        json = create_event_body(event)
+        json = create_event_body(event, zoom_id)
         return self.events_component.create_event(user_id, json, extra_headers)
 
     def update_event_by_zoom_id(
         self,
         user_id: str,
+        zoom_id: str,
         event: PartialEventParameters,
         extra_headers: Optional[Mapping[str, str]] = None,
     ) -> dict:
@@ -139,9 +141,7 @@ class CERNEventsComponents:
             dict: The response of the request
         """
         json = create_partial_event_body(event)
-        event_id = self.get_event_by_zoom_id(user_id, event["zoom_id"], extra_headers)[
-            "id"
-        ]
+        event_id = self.get_event_by_zoom_id(user_id, zoom_id, extra_headers)["id"]
         return self.events_component.update_event(
             user_id, event_id, json, extra_headers
         )
