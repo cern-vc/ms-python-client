@@ -44,13 +44,18 @@ class MSApiClient(MSClientInterface):
         config: Config,
         api_endpoint: str = "https://graph.microsoft.com/v1.0",
     ):
+        if "MS_ACCESS_TOKEN" in os.environ and os.getenv("MS_ACCESS_TOKEN") != "":
+            self.dev_token = os.environ["MS_ACCESS_TOKEN"]
+        else:
+            self.dev_token = None
+            self.oauth = Oauth2Flow(config)
+
         self.api_client = ApiClient(api_base_url=api_endpoint)
-        self.oauth = Oauth2Flow(config)
         self.init_components()
 
     def build_headers(self, extra_headers: Optional[_Headers] = None) -> _Headers:
-        if "MS_ACCESS_TOKEN" in os.environ and os.getenv("MS_ACCESS_TOKEN") != "":
-            token = os.environ["MS_ACCESS_TOKEN"]
+        if self.dev_token:
+            token = self.dev_token
         else:
             token = self.oauth.get_access_token()[0]
 
