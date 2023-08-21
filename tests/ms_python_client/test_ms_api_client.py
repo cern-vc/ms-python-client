@@ -51,7 +51,6 @@ class TestMSApiClientInit(BaseTest):
         assert headers["Authorization"] == f"Bearer {MOCK_TOKEN}"
         assert headers["test"] == "test"
 
-    @mock_msal()
     def test_with_token(self):
         os.environ["MS_ACCESS_TOKEN"] = "test_token"
         client = MSApiClient.init_from_dotenv(custom_dotenv=self.env_file)
