@@ -42,6 +42,7 @@ class PartialEventParameters(OptionalTimezone, TypedDict, total=False):
     end_time: str
 
 
+# This has been set arbitrarily
 ZOOM_ID_EXTENDED_PROPERTY_ID = (
     "String {d3123b00-8eb5-4f10-ae88-1269fe4cbaf0} Name ZoomId"
 )
