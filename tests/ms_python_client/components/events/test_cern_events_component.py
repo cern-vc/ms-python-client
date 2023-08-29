@@ -169,3 +169,69 @@ class TestEventsComponent(BaseTest):
         )
         assert zoom_id == "1234567890"
         assert responses.calls[0].request.headers["test"] == "test"
+
+    @responses.activate
+    def test_get_current_event(self):
+        responses.add(
+            responses.GET,
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
+            json={
+                "@odata.count": 1,
+                "value": [
+                    {
+                        "id": "event_id",
+                        "subject": "Test Event",
+                        "start": {"dateTime": "2021-01-01T00:00:00"},
+                        "end": {"dateTime": "2021-01-01T01:00:00"},
+                    }
+                ],
+            },
+            status=200,
+        )
+        event = self.events_component.get_current_event("user_id")
+        assert event["subject"] == "Test Event"
+        assert (
+            responses.calls[0].request.headers["Prefer"]
+            == 'outlook.timezone="Europe/Zurich"'
+        )
+
+    @responses.activate
+    def test_get_current_event_not_found(self):
+        responses.add(
+            responses.GET,
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
+            json={
+                "@odata.count": 0,
+                "value": [],
+            },
+            status=200,
+        )
+        with pytest.raises(NotFoundError):
+            self.events_component.get_current_event("user_id")
+
+    @responses.activate
+    def test_get_current_event_multiple_events(self):
+        responses.add(
+            responses.GET,
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events",
+            json={
+                "@odata.count": 2,
+                "value": [
+                    {
+                        "id": "event_id_1",
+                        "subject": "Test Event 1",
+                        "start": {"dateTime": "2021-01-01T00:00:00"},
+                        "end": {"dateTime": "2021-01-01T01:00:00"},
+                    },
+                    {
+                        "id": "event_id_2",
+                        "subject": "Test Event 2",
+                        "start": {"dateTime": "2021-01-01T00:00:00"},
+                        "end": {"dateTime": "2021-01-01T01:00:00"},
+                    },
+                ],
+            },
+            status=200,
+        )
+        event = self.events_component.get_current_event("user_id")
+        assert event["subject"] == "Test Event 1"

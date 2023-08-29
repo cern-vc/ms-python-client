@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ms-python-client"
-version = "2.0.2"
+version = "2.0.3"
 exclude = ["tests*", "example*", ".github*", ".git*", ".vscode*"]
 description = "This package is used to interact with the microsoft graph API"
 authors = ["Samuel Guillemet <samuel.guillemet@telecom-sudparis.eu>"]
@@ -12,7 +12,7 @@ packages = [{ include = "ms_python_client" }]
 python = "^3.9"
 python-dotenv = "^1.0.0"
 msal = "^1.22.0"
-requests = "^2.31.0"
+requests = "^2.23.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
