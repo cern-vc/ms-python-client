@@ -1,4 +1,5 @@
 from .cern_ms_api_client import CERNMSApiClient
+from .components.events.cern_events_component import NotFoundError
 from .config import Config
 from .ms_api_client import MSApiClient
 from .utils.error import generate_error_log
@@ -13,4 +14,5 @@ __all__ = [
     "EventParameters",
     "PartialEventParameters",
     "Config",
+    "NotFoundError",
 ]

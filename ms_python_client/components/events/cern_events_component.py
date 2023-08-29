@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from typing import Mapping, Optional
 
 from ms_python_client.components.events.events_component import EventsComponent
@@ -163,3 +164,32 @@ class CERNEventsComponents:
         """
         event_id = self.get_event_by_zoom_id(user_id, zoom_id, extra_headers)["id"]
         self.events_component.delete_event(user_id, event_id, extra_headers)
+
+    def get_current_event(
+        self,
+        user_id: str,
+    ) -> dict:
+        """Get the current event of a user
+
+        Args:
+            user_id (str): The user id
+
+        Returns:
+            dict: The response of the request
+        """
+        datetime_now = datetime.now().isoformat()
+        parameters = {
+            "$count": "true",
+            "$filter": f"start/dateTime le '{datetime_now}' and end/dateTime ge '{datetime_now}'",
+        }
+        extra_headers = {"Prefer": 'outlook.timezone="Europe/Zurich"'}
+        response = self.events_component.list_events(user_id, parameters, extra_headers)
+
+        count = response.get("@odata.count", 0)
+        if count == 0:
+            raise NotFoundError("No current event found")
+
+        if count > 1:
+            logger.warning("Found %s current events. Returning the first one.", count)
+
+        return response.get("value", [])[0]
