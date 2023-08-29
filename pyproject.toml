@@ -12,7 +12,7 @@ packages = [{ include = "ms_python_client" }]
 python = "^3.9"
 python-dotenv = "^1.0.0"
 msal = "^1.22.0"
-requests = "^2.31.0"
+requests = "^2.23.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
