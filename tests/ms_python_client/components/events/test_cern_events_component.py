@@ -7,6 +7,7 @@ from ms_python_client.components.events.cern_events_component import (
     NotFoundError,
 )
 from ms_python_client.utils.event_generator import (
+    ZOOM_ID_EXTENDED_PROPERTY_ID,
     EventParameters,
     PartialEventParameters,
 )
@@ -154,7 +155,7 @@ class TestEventsComponent(BaseTest):
                 "subject": "Test Event",
                 "singleValueExtendedProperties": [
                     {
-                        "id": "String {66f5a359-4659-4830-9070-00040ec6ac6e} Name ZoomId",
+                        "id": ZOOM_ID_EXTENDED_PROPERTY_ID,
                         "value": "1234567890",
                     }
                 ],
@@ -169,6 +170,29 @@ class TestEventsComponent(BaseTest):
         )
         assert zoom_id == "1234567890"
         assert responses.calls[0].request.headers["test"] == "test"
+
+    @responses.activate
+    def test_get_event_zoom_id_not_found(self):
+        responses.add(
+            responses.GET,
+            f"{TEST_API_ENDPOINT}/users/user_id/calendar/events/event_id",
+            json={
+                "id": "event_id",
+                "subject": "Test Event",
+                "singleValueExtendedProperties": [
+                    {
+                        "id": "Another id",
+                        "value": "Random value",
+                    }
+                ],
+            },
+            status=200,
+        )
+        headers = {
+            "test": "test",
+        }
+        with pytest.raises(NotFoundError):
+            self.events_component.get_event_zoom_id("user_id", "event_id", headers)
 
     @responses.activate
     def test_get_current_event(self):
