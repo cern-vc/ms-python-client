@@ -5,7 +5,12 @@ import sys
 
 from requests import HTTPError
 
-from ms_python_client import CERNMSApiClient, generate_error_log, setup_logs
+from ms_python_client import (
+    CERNMSApiClient,
+    NotFoundError,
+    generate_error_log,
+    setup_logs,
+)
 
 logger = setup_logs(log_level=logging.INFO)
 
@@ -25,4 +30,8 @@ try:
 
 except HTTPError as e:
     print(json.dumps(generate_error_log(e), indent=4))
+    sys.exit(1)
+
+except NotFoundError as e:
+    logger.error(e)
     sys.exit(1)
