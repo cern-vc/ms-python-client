@@ -40,6 +40,7 @@ class CERNEventsComponents:
         Args:
             user_id (str): The user id
             parameters (dict): Optional parameters for the request
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -55,7 +56,9 @@ class CERNEventsComponents:
         """Get an event of a user
 
         Args:
+            user_id (str): The user id
             zoom_id (str): The event id
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -63,9 +66,9 @@ class CERNEventsComponents:
         parameters = {
             "$count": "true",
             "$filter": f"singleValueExtendedProperties/Any(ep: ep/id eq \
-                '{ZOOM_ID_EXTENDED_PROPERTY_ID}' and ep/value eq '{zoom_id}')",
+                        '{ZOOM_ID_EXTENDED_PROPERTY_ID}' and ep/value eq '{zoom_id}')",
             "$expand": f"singleValueExtendedProperties($filter=id eq \
-                '{ZOOM_ID_EXTENDED_PROPERTY_ID}')",
+                        '{ZOOM_ID_EXTENDED_PROPERTY_ID}')",
         }
         response = self.events_component.list_events(user_id, parameters, extra_headers)
 
@@ -91,20 +94,25 @@ class CERNEventsComponents:
         """Get the zoom id of an event of a user
 
         Args:
+            user_id (str): The user id
             event_id (str): The event id
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             str: The zoom id of the event
         """
         parameters = {
-            "$expand": f"singleValueExtendedProperties($filter=id eq \
-                '{ZOOM_ID_EXTENDED_PROPERTY_ID}')",
+            "$expand": f"singleValueExtendedProperties($filter=id eq '{ZOOM_ID_EXTENDED_PROPERTY_ID}')",
         }
         response = self.events_component.get_event(
             user_id, event_id, parameters, extra_headers
         )
 
-        return response["singleValueExtendedProperties"][0]["value"]
+        for property in response["singleValueExtendedProperties"]:
+            if property["id"] == ZOOM_ID_EXTENDED_PROPERTY_ID:
+                return property["value"]
+
+        raise NotFoundError(f"Zoom id not found for event {event_id}")
 
     def create_event(
         self,
@@ -117,7 +125,9 @@ class CERNEventsComponents:
 
         Args:
             user_id (str): The user id
+            zoom_id (str): The zoom id of the event
             event (EventParameters): The event data
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -136,7 +146,9 @@ class CERNEventsComponents:
 
         Args:
             user_id (str): The user id
+            zoom_id (str): The zoom id of the event
             event (EventParameters): The event parameters
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -158,6 +170,7 @@ class CERNEventsComponents:
         Args:
             user_id (str): The user id
             zoom_id (str): The event id
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
