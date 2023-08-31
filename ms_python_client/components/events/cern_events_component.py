@@ -40,6 +40,7 @@ class CERNEventsComponents:
         Args:
             user_id (str): The user id
             parameters (dict): Optional parameters for the request
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -55,7 +56,9 @@ class CERNEventsComponents:
         """Get an event of a user
 
         Args:
+            user_id (str): The user id
             zoom_id (str): The event id
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -91,7 +94,9 @@ class CERNEventsComponents:
         """Get the zoom id of an event of a user
 
         Args:
+            user_id (str): The user id
             event_id (str): The event id
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             str: The zoom id of the event
@@ -120,7 +125,9 @@ class CERNEventsComponents:
 
         Args:
             user_id (str): The user id
+            zoom_id (str): The zoom id of the event
             event (EventParameters): The event data
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -139,7 +146,9 @@ class CERNEventsComponents:
 
         Args:
             user_id (str): The user id
+            zoom_id (str): The zoom id of the event
             event (EventParameters): The event parameters
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
@@ -161,6 +170,7 @@ class CERNEventsComponents:
         Args:
             user_id (str): The user id
             zoom_id (str): The event id
+            extra_headers (dict): Optional headers for the request
 
         Returns:
             dict: The response of the request
