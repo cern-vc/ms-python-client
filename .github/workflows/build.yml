@@ -47,7 +47,7 @@ jobs:
     needs: get-version
     if: needs.get-version.outputs.tag_name != ''
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build and publish to pypi
         uses: JRubics/poetry-publish@v1.17
         with:
