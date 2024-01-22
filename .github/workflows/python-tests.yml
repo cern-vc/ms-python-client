@@ -24,7 +24,7 @@ jobs:
         uses: abatilo/actions-poetry@v3
 
       - name: Define a cache for the virtual environment based on the dependencies lock file
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ./.venv
           key: venv-${{ hashFiles('poetry.lock') }}
